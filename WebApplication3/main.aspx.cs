@@ -18,53 +18,26 @@ namespace WebApplication3
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            allPanels.Add(homePanel);
-            allPanels.Add(signInPanel);
-            allPanels.Add(signUpPanel);
-            allPanels.Add(usersContainerPanel);
-            allPanels.Add(usersOnlyPanel);
-            allPanels.Add(askUsPanel);
-            allPanels.Add(updatesPanel);
-            allPanels.Add(aboutPanel);
-
+            initialPanel();
             disablePanelVisiable();
+
             createTableUsers();
             createTableGames();
-            createUsersDropDownList();
+            createNumOfGamesPerPlayer();
 
             if (!IsPostBack)
             {
-                Session["userName"] = "";
+                Session["userName"] = null;
+                Session["UserID"] = null;
+                Session["password"] = null;
+                Session["Family"] = null;
                 Session["numberOfVisiting"] = 0;
+                showPanel("homePanel");
             }
-            showPanel("homePanel");
+
         }
 
-        public void createUsersDropDownList()
-        {
-            List<Player> players = restCalls.GetPlayers();
-            usersDropDownList.Items.Add(new ListItem("", ""));
-
-            foreach (Player p in players)
-            {
-                usersDropDownList.Items.Add(new ListItem(p.Name, p.Id.ToString()));
-            }
-        }
-
-        public void createTableUsers()
-        {
-            List<Player> players = restCalls.GetPlayers();
-            Table tblAllUser = createPlayersTable(players);
-            pnlInfo1.Controls.Add(tblAllUser);
-        }
-
-        public void createTableGames()
-        {
-            List<Game> games = restCalls.GetGames();
-            Table tblAllGames = createGamesTable(games);
-            pnlInfo2.Controls.Add(tblAllGames);
-        }
-
+        /* Events of menu options */
         protected void linkHome_Click(object sender, EventArgs e)
         {
             showPanel("homePanel");
@@ -80,18 +53,63 @@ namespace WebApplication3
             showPanel("signUp");
         }
 
-        protected void linkUsersOnly_Click(object sender, EventArgs e)
+        protected void linkSignOut_Click(object sender, EventArgs e)
         {
-          //  if(String.IsNullOrEmpty(Session["userName"].ToString()))
-            if(Session["userName"] == null)
+            Session["UserID"] = null;
+            Session["password"] = null;
+            Session["userName"] = null;
+            Session["Family"] = null;
+            Session["numberOfVisiting"] = 0;
+            showPanel("homePanel");
+        }
+
+        protected void linkAskUs_Click(object sender, EventArgs e)
+        {
+            if (Session["userName"] == null)
             {
                 usersOnlyWarning.Visible = true;
                 showPanel("signIn");
             }
             else
             {
-                usersOnlyDropDownList.ClearSelection();
-                showPanel("usersOnly");
+                showPanel("askUs");
+            }
+        }
+
+        protected void linkUpdateInfo_Click(object sender, EventArgs e)
+        {
+            if (Session["userName"] == null)
+            {
+                usersOnlyWarning.Visible = true;
+                showPanel("signIn");
+            }
+            else
+            {
+                txtIDLabel.Text = Session["UserID"].ToString();
+                txtUpdateInfoUserName.Text = Session["userName"].ToString();
+                txtUpdateInfoUserLastName.Text = Session["Family"].ToString() ;
+                if(Session["password"] != null)
+                {
+                    txtUpdateInfoUserPassword.Text = Session["password"].ToString();
+                }
+                
+                lblUpdateSavedSuccess.Visible = false;
+                lblUpdateSavedFailed.Visible = false;
+                lblUpdateNoChanges.Visible = false;
+                showPanel("updates");
+            }
+        }
+
+        protected void linkGames_Click(object sender, EventArgs e)
+        {
+            if (Session["userName"] == null)
+            {
+                usersOnlyWarning.Visible = true;
+                showPanel("signIn");
+            }
+            else
+            {
+                showPanel("games");
             }
         }
 
@@ -100,10 +118,13 @@ namespace WebApplication3
             showPanel("about");
         }
 
+        /* Infrastructure */
+
         private void showPanel(String panelName)
         {
             disablePanelVisiable();
             Panel p = new Panel();
+            UpdatePanel up = new UpdatePanel();
             switch (panelName)
             {
                 case "homePanel":
@@ -111,6 +132,12 @@ namespace WebApplication3
                     break;
                 case "signIn":
                     p = signInPanel;
+                    break;
+                case "login susscess":
+                    p = LoginSuccessPanel;
+                    break;
+                case "login failed":
+                    p = LoginFailedPanel;
                     break;
                 case "signUp":
                     p = signUpPanel;
@@ -121,18 +148,25 @@ namespace WebApplication3
                 case "about":
                     p = aboutPanel;
                     break;
-                case "usersOnly":
-                    p = usersOnlyPanel;
-                    break;
                 case "userControl":
                     p = usersContainerPanel;
                     break;
                 case "updates":
-                    p = updatesPanel;
+                    up = updatesPanel;
+                    break;
+                case "games":
+                    p = gamesPanel;
                     break;
             }
-            p.Visible = true;
-            PlaceHolder1.Controls.Add(p);
+            if (panelName.Equals("updates"))
+           {
+                up.Visible = true;
+                PlaceHolder1.Controls.Add(up);
+            } else
+            {
+                p.Visible = true;
+                PlaceHolder1.Controls.Add(p);
+            }
         }
 
         private void disablePanelVisiable()
@@ -143,211 +177,73 @@ namespace WebApplication3
             }
         }
 
-        protected void btnSignIn_Click(object sender, EventArgs e)
+        public void initialPanel()
         {
-            Panel p = new Panel();
-            Label l1 = new Label();
-            Label l2 = new Label();
-           // p.Visible = false;
+            allPanels.Add(homePanel);
+            allPanels.Add(signInPanel);
+            allPanels.Add(LoginSuccessPanel);
+            allPanels.Add(LoginFailedPanel);
+            allPanels.Add(signUpPanel);
+            allPanels.Add(usersContainerPanel);
+            allPanels.Add(askUsPanel);
+          //  allPanels.Add(updatesPanel);
+            allPanels.Add(gamesPanel);
+            allPanels.Add(aboutPanel);
 
-            string userName = textBoxSignInUname.Text;
-            string password = textBoxSignInPsw.Text;
+            updatesPanel.Visible = false;
 
-
-            l1.Text = "Hello" + userName;
-            l2.Text ="You can start play now";
-
-            p.Controls.Add(l1);
-            p.Controls.Add(l2);
-
-            disablePanelVisiable();
-            PlaceHolder1.Controls.Add(p);
-            p.Visible = true;
-
-            Session["userName"] = userName;
-            Session["numberOfVisiting"] = (int)Session["numberOfVisiting"] + 1;
         }
 
-        protected void UsersOnlyDropDownList_OnSelectedChange(object sender, EventArgs e)
+        public void createNumOfGamesPerPlayer()
         {
-            int index = usersOnlyDropDownList.SelectedIndex;
-            switch (index)
+            List<Player> players = restCalls.GetPlayers();
+            Table tblGamesCount = new Table();
+
+            TableRow tRow = new TableRow();
+            TableCell tCell = new TableCell();
+            tCell.Text = "Id";
+            tRow.Cells.Add(tCell);
+            tCell = new TableCell();
+            tCell.Text = "Name";
+            tRow.Cells.Add(tCell);
+            tCell = new TableCell();
+            tCell.Text = "Number of games";
+            tRow.Cells.Add(tCell);
+            tCell = new TableCell();
+
+            tblGamesCount.Rows.Add(tRow);
+
+            foreach (Player p in players)
             {
-                case 1:
-                    askUsPanel.Visible = true;
-                    updatesPanel.Visible = false;
-                    showPanel("askUs");
-                    break;
-                case 2:
-                    askUsPanel.Visible = false;
-                    updatesPanel.Visible = true;
-                    showPanel("updates");
-                    break;
-                default:
-                    askUsPanel.Visible = false;
-                    updatesPanel.Visible = false;
-                    break;
+                int count = restCalls.GetTotalGamesCountForPlayer(p.Id.ToString());
+                tRow = new TableRow();
+                tCell = new TableCell();
+                tCell.Text = p.Id.ToString();
+                tRow.Cells.Add(tCell);
+                tCell = new TableCell();
+                tCell.Text = p.Name;
+                tRow.Cells.Add(tCell);
+                tCell = new TableCell();
+                tCell.Text = count.ToString();
+                tRow.Cells.Add(tCell);
+                tblGamesCount.Rows.Add(tRow);
             }
-            usersOnlyDropDownList.ClearSelection();
-           
+
+            pnlInfo5.Controls.Add(tblGamesCount);
         }
 
-        protected void usersDropDownList_OnSelectedChange(object sender, EventArgs e)
+        public void createTableUsers()
         {
-            int index = usersOnlyDropDownList.SelectedIndex;
-            switch (index)
-            {
-                case 1:
-                    askUsPanel.Visible = true;
-                    updatesPanel.Visible = false;
-                    break;
-                case 2:
-                    askUsPanel.Visible = false;
-                    updatesPanel.Visible = true;
-                    break;
-                default:
-                    askUsPanel.Visible = false;
-                    updatesPanel.Visible = false;
-                    break;
-            }
-            usersOnlyDropDownList.ClearSelection();
+            List<Player> players = restCalls.GetPlayers();
+            Table tblAllUser = createPlayersTable(players);
+            pnlInfo1.Controls.Add(tblAllUser);
         }
 
-        protected void rptUsers_RowDataBound(object sender, RepeaterItemEventArgs e)
+        public void createTableGames()
         {
-         /*   String current = String.Empty;
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-                //Binding to Game object.
-                if (current != (e.Item.DataItem as Game).GameId)
-                {
-                    current = (e.Item.DataItem as Game).Id;
-                    e.Item.FindControl("headerTable").Visible = true;
-                    (e.Item.FindControl("headerTitle") as Label).Text = (e.Item.DataItem as Employee).Department;
-                }
-                else
-                {
-                    e.Item.FindControl("headerTable").Visible = false;
-                }
-            }*/
-        }
-
-        private void bindGridView()
-        {
-           /* List<Game> games = new List<Game>();
-            rpt.DataSource = games.OrderBy(x => x.Id);
-            rpt.DataBind();*/
-        }
-
-        protected void gamesDropDownList_OnSelectedChange(object sender, EventArgs e)
-        {
-            int index = usersOnlyDropDownList.SelectedIndex;
-            switch (index)
-            {
-                case 1:
-                    askUsPanel.Visible = true;
-                    updatesPanel.Visible = false;
-                    break;
-                case 2:
-                    askUsPanel.Visible = false;
-                    updatesPanel.Visible = true;
-                    break;
-                default:
-                    askUsPanel.Visible = false;
-                    updatesPanel.Visible = false;
-                    break;
-            }
-            usersOnlyDropDownList.ClearSelection();
-        }
-
-        protected void rptGames_RowDataBound(object sender, RepeaterItemEventArgs e)
-        {
-         /*   String current = String.Empty;
-            if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
-            {
-                //Binding to Game object.
-                if (current != (e.Item.DataItem as Game).GameId)
-                {
-                    current = (e.Item.DataItem as Game).Id;
-                    e.Item.FindControl("headerTable").Visible = true;
-                    (e.Item.FindControl("headerTitle") as Label).Text = (e.Item.DataItem as Employee).Department;
-                }
-                else
-                {
-                    e.Item.FindControl("headerTable").Visible = false;
-                }
-            }*/
-        }
-
-        protected void btnNumberOfUsers_Click(object sender, EventArgs e)
-        {
-            int count = Convert.ToInt32(textBoxNumberOfUsers.Text);
-            for (int i = 0; i < count; i++)
-            {
-                Label lblUserName = new Label();
-                lblUserName.ID = "lblUserName" + i.ToString();
-                lblUserName.Text = "User Name:";
-                Label lblUserLastName = new Label();
-                lblUserLastName.ID = "lblUserLastName" + i.ToString();
-                lblUserLastName.Text = "Last Name:";
-                TextBox txtUserName = new TextBox();
-                txtUserName.ID = "txtUserName" + i.ToString();
-                TextBox txtUserLastName = new TextBox();
-                txtUserLastName.ID = "txtUseLastrName" + i.ToString();
-
-                Label lblUserPassword = new Label();
-                lblUserLastName.ID = "lblUserPassword" + i.ToString();
-                lblUserLastName.Text = "Password:";
-                TextBox txtUserPassword = new TextBox();
-                txtUserName.ID = "txtUserPassword" + i.ToString();
-                txtUserPassword.TextMode = TextBoxMode.Password;
-
-                Label lblColorChecker = new Label();
-                lblColorChecker.Text = "please choose checker color: ";
-                RadioButtonList rbl = new RadioButtonList();
-                rbl.ID = "RadioButtonList";
-                rbl.RepeatDirection = RepeatDirection.Horizontal;
-                rbl.Items.Add(new ListItem("Black"));
-                rbl.Items.Add(new ListItem("White"));
-
-                usersContainerPanel.Controls.Add(lblUserName);
-                usersContainerPanel.Controls.Add(new LiteralControl("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"));
-                usersContainerPanel.Controls.Add(txtUserName);
-                usersContainerPanel.Controls.Add(new LiteralControl("<br />"));
-
-                usersContainerPanel.Controls.Add(lblUserLastName);
-                usersContainerPanel.Controls.Add(new LiteralControl("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"));
-                usersContainerPanel.Controls.Add(txtUserLastName);
-                usersContainerPanel.Controls.Add(new LiteralControl("<br />"));
-
-                usersContainerPanel.Controls.Add(lblUserPassword);
-                usersContainerPanel.Controls.Add(new LiteralControl("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"));
-                usersContainerPanel.Controls.Add(txtUserPassword);
-                usersContainerPanel.Controls.Add(new LiteralControl("<br />"));
-
-                usersContainerPanel.Controls.Add(lblColorChecker);
-                usersContainerPanel.Controls.Add(new LiteralControl("<br />"));
-                usersContainerPanel.Controls.Add(rbl);
-                usersContainerPanel.Controls.Add(new LiteralControl("<br /><br /><br />"));
-            }
-            //usersContainerPanel.Visible = true;
-            showPanel("userControl");
-        }
-
-        protected void btnSignUp_Click(object sender, EventArgs e)
-        {
-
-        }
-        
-        public void usersDropDownList_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            ListItem item = usersDropDownList.SelectedItem;
-            if(item != null && !String.IsNullOrEmpty(item.Value))
-            {
-                List<Game> games = restCalls.GetGameByPlayerId(item.Value);
-                Table gamesByPlayerID = createGamesTable(games);
-                pnlInfo3.Controls.Add(gamesByPlayerID);
-            }
+            List<Game> games = restCalls.GetGames();
+            Table tblAllGames = createGamesTable(games);
+            pnlInfo2.Controls.Add(tblAllGames);
         }
 
         public Table createGamesTable(List<Game> games)
@@ -436,5 +332,198 @@ namespace WebApplication3
             return tblAllUser;
         }
 
+        /* Events */
+        protected void btnSignIn_Click(object sender, EventArgs e)
+        {
+            string userName = textBoxSignInUname.Text;
+            string password = textBoxSignInPsw.Text;
+
+            Player player = restCalls.LoginWeb(userName, password);
+            if(player == null)
+            {
+                textBoxSignInUname.Text = "";
+                textBoxSignInPsw.Text = "";
+                showPanel("login failed");
+            } else
+            {
+                Session["UserID"] = player.Id;
+                Session["password"] = player.Password;
+                Session["userName"] = player.Name;
+                Session["Family"] = player.Family;
+                Session["numberOfVisiting"] = (int)Session["numberOfVisiting"] + 1;
+                showPanel("login susscess");
+            }
+        }
+
+        protected void UpdatePanel_UnLoad(object sender, EventArgs e)
+        {
+            MethodInfo methodInfo = typeof(ScriptManager).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(i => i.Name.Equals("System.Web.UI.IScriptManagerInternal.RegisterUpdatePanel")).First();
+            methodInfo.Invoke(ScriptManager.GetCurrent(Page), new object[] { sender as UpdatePanel });
+
+        }
+
+        protected void btnNumberOfUsers_Click(object sender, EventArgs e)
+        {
+            int count = Convert.ToInt32(textBoxNumberOfUsers.Text);
+            for (int i = 0; i < count; i++)
+            {
+                Label lblUserName = new Label();
+                lblUserName.ID = "lblUserName" + i.ToString();
+                lblUserName.Text = "User Name:";
+                Label lblUserLastName = new Label();
+                lblUserLastName.ID = "lblUserLastName" + i.ToString();
+                lblUserLastName.Text = "Last Name:";
+                TextBox txtUserName = new TextBox();
+                txtUserName.ID = "txtUserName" + i.ToString();
+                TextBox txtUserLastName = new TextBox();
+                txtUserLastName.ID = "txtUseLastrName" + i.ToString();
+
+                Label lblUserPassword = new Label();
+                lblUserLastName.ID = "lblUserPassword" + i.ToString();
+                lblUserLastName.Text = "Password:";
+                TextBox txtUserPassword = new TextBox();
+                txtUserName.ID = "txtUserPassword" + i.ToString();
+                txtUserPassword.TextMode = TextBoxMode.Password;
+
+                Label lblColorChecker = new Label();
+                lblColorChecker.Text = "please choose checker color: ";
+                RadioButtonList rbl = new RadioButtonList();
+                rbl.ID = "RadioButtonList";
+                rbl.RepeatDirection = RepeatDirection.Horizontal;
+                rbl.Items.Add(new ListItem("Black"));
+                rbl.Items.Add(new ListItem("White"));
+
+                usersContainerPanel.Controls.Add(lblUserName);
+                usersContainerPanel.Controls.Add(new LiteralControl("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"));
+                usersContainerPanel.Controls.Add(txtUserName);
+                usersContainerPanel.Controls.Add(new LiteralControl("<br />"));
+
+                usersContainerPanel.Controls.Add(lblUserLastName);
+                usersContainerPanel.Controls.Add(new LiteralControl("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"));
+                usersContainerPanel.Controls.Add(txtUserLastName);
+                usersContainerPanel.Controls.Add(new LiteralControl("<br />"));
+
+                usersContainerPanel.Controls.Add(lblUserPassword);
+                usersContainerPanel.Controls.Add(new LiteralControl("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"));
+                usersContainerPanel.Controls.Add(txtUserPassword);
+                usersContainerPanel.Controls.Add(new LiteralControl("<br />"));
+
+                usersContainerPanel.Controls.Add(lblColorChecker);
+                usersContainerPanel.Controls.Add(new LiteralControl("<br />"));
+                usersContainerPanel.Controls.Add(rbl);
+                usersContainerPanel.Controls.Add(new LiteralControl("<br /><br /><br />"));
+            }
+            //usersContainerPanel.Visible = true;
+            showPanel("userControl");
+        }
+
+        protected void btnSignUp_Click(object sender, EventArgs e)
+        {
+
+        }
+        
+        protected void UsersDropDownList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListItem item = UsersDropDownList.SelectedItem;
+            if (item != null && !String.IsNullOrEmpty(item.Value))
+            {
+                List<Game> games = restCalls.GetGameByPlayerId(item.Value);
+                Table gamesByPlayerID = createGamesTable(games);
+                pnlInfo3.Controls.Add(gamesByPlayerID);
+            }
+         
+        }
+
+        protected void UsersDropDownList_Init(object sender, EventArgs e)
+        {
+            List<Player> players = restCalls.GetPlayers();
+            UsersDropDownList.DataTextField = "Name";
+            UsersDropDownList.DataValueField = "ID";
+            UsersDropDownList.DataSource = players;
+            UsersDropDownList.DataBind();
+        }
+
+        protected void gamesDropDownList_Init(object sender, EventArgs e)
+        {
+            List<Game> games = restCalls.GetGames();
+            gamesDropDownList.DataTextField = "CreatedDateTime";
+            gamesDropDownList.DataValueField = "ID";
+            gamesDropDownList.DataSource = games;
+            gamesDropDownList.DataBind();
+        }
+
+        protected void gamesDropDownList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ListItem item = gamesDropDownList.SelectedItem;
+            if (item != null && !String.IsNullOrEmpty(item.Value))
+            {
+                List<Player> players = restCalls.GetPlayersByGameId(item.Value);
+                Table playersByGameID = createPlayersTable(players);
+                pnlInfo4.Controls.Add(playersByGameID);
+            }
+        }
+
+        protected void btnUpdateInfo_Click(object sender, EventArgs e)
+        {
+            string updateUserName = txtUpdateInfoUserName.Text;
+            string updateFamily = txtUpdateInfoUserLastName.Text;
+            string updatePassword = txtUpdateInfoUserPassword.Text;
+            if(!Session["userName"].ToString().Equals(updateUserName) || !Session["Family"].ToString().Equals(updateFamily) 
+                || !Session["password"].ToString().Equals(updatePassword))
+            {
+                Player p = restCalls.GetPlayerById(Session["UserID"].ToString());
+                p.Name = updateUserName;
+               // p.Family.Name = updateFamily;
+                p.Password = updatePassword;
+                bool saved = restCalls.UpdatePlayer(p);
+                if(saved)
+                {
+                    lblUpdateSavedSuccess.Visible = true;
+                    lblUpdateSavedFailed.Visible = false;
+                    lblUpdateNoChanges.Visible = false;
+
+                    Session["password"] = updatePassword;
+                    Session["userName"] = updateUserName;
+                    Session["Family"] = updateFamily;
+                } else
+                {
+                    lblUpdateSavedSuccess.Visible = false;
+                    lblUpdateSavedFailed.Visible = true;
+                    lblUpdateNoChanges.Visible = false;
+                    
+                }
+            }
+            else
+            {
+                lblUpdateSavedSuccess.Visible = false;
+                lblUpdateSavedFailed.Visible = false;
+                lblUpdateNoChanges.Visible = true;
+            }
+           // txtUpdateInfoUserName.Text = updateUserName;
+          //  txtUpdateInfoUserLastName.Text = updateFamily;
+          //  txtUpdateInfoUserPassword.Text = updatePassword;
+           // showPanel("updates");
+        }
+
+        protected void deleteUser_Click(object sender, EventArgs e)
+        {
+            bool removed = restCalls.RemovePlayer(Session["UserID"].ToString());
+            if (removed)
+            {
+                Session["UserID"] = null;
+                Session["password"] = null;
+                Session["userName"] = null;
+                Session["Family"] = null;
+                Session["numberOfVisiting"] = 0;
+                showPanel("homePanel");
+            }
+            else
+            {
+                lblUpdateSavedSuccess.Visible = false;
+                lblUpdateSavedFailed.Visible = true;
+                lblUpdateNoChanges.Visible = false;
+            }
+        }
     }
 }

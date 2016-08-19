@@ -16,6 +16,10 @@ namespace WebApplication3
         /******  REST calls ******/
         // Players REST calls
         [OperationContract]
+        [WebGet(UriTemplate = "/players/login?user={name}&password={password}", ResponseFormat = WebMessageFormat.Json)]
+        Player LoginWeb(string name, string password);
+
+        [OperationContract]
         [WebInvoke(Method = "PUT", UriTemplate = "/players/add", ResponseFormat = WebMessageFormat.Json)]
         bool AddPlayer(Player player);
 
@@ -206,6 +210,22 @@ namespace WebApplication3
             return channel;
         }
 
+        public Player LoginWeb(String name, String password)
+        {
+            WebChannelFactory<IRestCheckersService> channel = MakeChannel();
+            Player result = null;
+            try
+            {
+                channel.Open();
+                IRestCheckersService c = channel.CreateChannel();
+                result = c.LoginWeb(name,password);
+                channel.Close();
+                return result;
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message); }
+            return result;
+        }
+
         public List<Player> GetPlayers()
         {
             WebChannelFactory<IRestCheckersService> channel = MakeChannel();
@@ -254,15 +274,15 @@ namespace WebApplication3
             return result;
         }
 
-        public List<Game> GetPlayersByGameId(string gameId)
+        public List<Player> GetPlayersByGameId(string gameId)
         {
             WebChannelFactory<IRestCheckersService> channel = MakeChannel();
-            List<Game> result = new List<Game>();
+            List<Player> result = new List<Player>();
             try
             {
                 channel.Open();
                 IRestCheckersService c = channel.CreateChannel();
-                result = c.GetGamesByPlayerId(gameId);
+                result = c.GetPlayersByGame(gameId);
                 channel.Close();
                 return result;
             }

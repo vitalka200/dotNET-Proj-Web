@@ -22,6 +22,15 @@ namespace WebApplication3 {
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
         
         /// <summary>
+        /// ScriptManager control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.ScriptManager ScriptManager;
+        
+        /// <summary>
         /// linkHome control.
         /// </summary>
         /// <remarks>
@@ -31,31 +40,31 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.LinkButton linkHome;
         
         /// <summary>
-        /// linkSignIn control.
+        /// linkaskUs control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton linkSignIn;
+        protected global::System.Web.UI.WebControls.LinkButton linkaskUs;
         
         /// <summary>
-        /// signUpUser control.
+        /// linkUpdateInfo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton signUpUser;
+        protected global::System.Web.UI.WebControls.LinkButton linkUpdateInfo;
         
         /// <summary>
-        /// linkUsersOnly control.
+        /// linkGames control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.LinkButton linkUsersOnly;
+        protected global::System.Web.UI.WebControls.LinkButton linkGames;
         
         /// <summary>
         /// linkAbout control.
@@ -94,24 +103,6 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.Panel homePanel;
         
         /// <summary>
-        /// usersOnlyPanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel usersOnlyPanel;
-        
-        /// <summary>
-        /// usersOnlyDropDownList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList usersOnlyDropDownList;
-        
-        /// <summary>
         /// askUsPanel control.
         /// </summary>
         /// <remarks>
@@ -119,15 +110,6 @@ namespace WebApplication3 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel askUsPanel;
-        
-        /// <summary>
-        /// ScriptManager1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.ScriptManager ScriptManager1;
         
         /// <summary>
         /// pnlHeader1 control.
@@ -211,13 +193,13 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.Panel pnlHeader3;
         
         /// <summary>
-        /// usersDropDownList control.
+        /// UsersDropDownList control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList usersDropDownList;
+        protected global::System.Web.UI.WebControls.DropDownList UsersDropDownList;
         
         /// <summary>
         /// imgToggle3 control.
@@ -229,6 +211,15 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.Image imgToggle3;
         
         /// <summary>
+        /// UpdatePanel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
+        
+        /// <summary>
         /// pnlInfo3 control.
         /// </summary>
         /// <remarks>
@@ -236,15 +227,6 @@ namespace WebApplication3 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlInfo3;
-        
-        /// <summary>
-        /// CollapsiblePanelExtender3 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::AjaxControlToolkit.CollapsiblePanelExtender CollapsiblePanelExtender3;
         
         /// <summary>
         /// pnlHeader4 control.
@@ -256,15 +238,6 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.Panel pnlHeader4;
         
         /// <summary>
-        /// gamesDropDownList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList gamesDropDownList;
-        
-        /// <summary>
         /// imgToggle4 control.
         /// </summary>
         /// <remarks>
@@ -272,6 +245,24 @@ namespace WebApplication3 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Image imgToggle4;
+        
+        /// <summary>
+        /// UpdatePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel UpdatePanel;
+        
+        /// <summary>
+        /// gamesDropDownList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList gamesDropDownList;
         
         /// <summary>
         /// pnlInfo4 control.
@@ -283,22 +274,40 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.Panel pnlInfo4;
         
         /// <summary>
-        /// pnl control.
+        /// pnlHeader5 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Repeater pnl;
+        protected global::System.Web.UI.WebControls.Panel pnlHeader5;
         
         /// <summary>
-        /// CollapsiblePanelExtender4 control.
+        /// ingToggle5 control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::AjaxControlToolkit.CollapsiblePanelExtender CollapsiblePanelExtender4;
+        protected global::System.Web.UI.WebControls.Image ingToggle5;
+        
+        /// <summary>
+        /// pnlInfo5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlInfo5;
+        
+        /// <summary>
+        /// CollapsiblePanelExtender5 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::AjaxControlToolkit.CollapsiblePanelExtender CollapsiblePanelExtender5;
         
         /// <summary>
         /// updatesPanel control.
@@ -307,7 +316,133 @@ namespace WebApplication3 {
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Panel updatesPanel;
+        protected global::System.Web.UI.UpdatePanel updatesPanel;
+        
+        /// <summary>
+        /// userIDLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label userIDLabel;
+        
+        /// <summary>
+        /// txtIDLabel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtIDLabel;
+        
+        /// <summary>
+        /// lblUpdateInfoUserName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUpdateInfoUserName;
+        
+        /// <summary>
+        /// txtUpdateInfoUserName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtUpdateInfoUserName;
+        
+        /// <summary>
+        /// lblUpdateInfoUserLastName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUpdateInfoUserLastName;
+        
+        /// <summary>
+        /// txtUpdateInfoUserLastName control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtUpdateInfoUserLastName;
+        
+        /// <summary>
+        /// lblUpdateInfoUserPassowrd control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUpdateInfoUserPassowrd;
+        
+        /// <summary>
+        /// txtUpdateInfoUserPassword control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtUpdateInfoUserPassword;
+        
+        /// <summary>
+        /// lblUpdateSavedSuccess control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUpdateSavedSuccess;
+        
+        /// <summary>
+        /// lblUpdateSavedFailed control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUpdateSavedFailed;
+        
+        /// <summary>
+        /// lblUpdateNoChanges control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUpdateNoChanges;
+        
+        /// <summary>
+        /// btnUpdateInfo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnUpdateInfo;
+        
+        /// <summary>
+        /// deleteUser control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button deleteUser;
+        
+        /// <summary>
+        /// gamesPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel gamesPanel;
         
         /// <summary>
         /// signInPanel control.
@@ -344,6 +479,15 @@ namespace WebApplication3 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox textBoxSignInPsw;
+        
+        /// <summary>
+        /// btnSignIn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSignIn;
         
         /// <summary>
         /// signUpPanel control.
@@ -391,6 +535,24 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.Button btnSignUp;
         
         /// <summary>
+        /// LoginSuccessPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel LoginSuccessPanel;
+        
+        /// <summary>
+        /// LoginFailedPanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel LoginFailedPanel;
+        
+        /// <summary>
         /// aboutPanel control.
         /// </summary>
         /// <remarks>
@@ -398,5 +560,32 @@ namespace WebApplication3 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel aboutPanel;
+        
+        /// <summary>
+        /// linksignUp control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton linksignUp;
+        
+        /// <summary>
+        /// linkSignIn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton linkSignIn;
+        
+        /// <summary>
+        /// linkSignOut control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.LinkButton linkSignOut;
     }
 }
