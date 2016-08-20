@@ -15,6 +15,7 @@ namespace WebApplication3
     {
         const int MAX_TO_SIGN_UP = 5;
         const int MIN_TO_SIGN_UP = 1;
+        int numberOfPlayers = 0;
 
         List<Panel> allPanels = new List<Panel>();
         public RestApiCalls restCalls = new RestApiCalls();
@@ -357,12 +358,9 @@ namespace WebApplication3
             return newContent.Equals(oldContent);
         }
 
-        private void CongigSignUp(int signUpCount)
+        private void configSignUp(int signUpCount)
         {
-            int visiableDisable = MAX_TO_SIGN_UP - signUpCount;
-            textBoxNumberOfUsers.Text = "";
-            lblUserContainerNumberOfUsers.Text = signUpCount.ToString();
-            switch(signUpCount)
+            switch (signUpCount)
             {
                 case 1:
                     enableUser1(true);
@@ -452,7 +450,21 @@ namespace WebApplication3
             ruvUserName1.Enabled = enable;
             ruvPasswordUser1.Enabled = enable;
         }
-        
+
+        private void initSignUp()
+        {
+            txtSignUpUserName1.Text = "";
+            txtSignUpPassword1.Text = "";
+            txtSignUpUserName2.Text = "";
+            txtSignUpPassword2.Text = "";
+            txtSignUpUserName3.Text = "";
+            txtSignUpPassword3.Text = "";
+            txtSignUpUserName4.Text = "";
+            txtSignUpPassword4.Text = "";
+            txtSignUpUserName5.Text = "";
+            txtSignUpPassword5.Text = "";
+        }
+
         /* Events */
         protected void UpdatePanel_UnLoad(object sender, EventArgs e)
         {
@@ -488,8 +500,8 @@ namespace WebApplication3
         
         protected void btnNumberOfUsers_Click(object sender, EventArgs e)
         {
-            int count = Convert.ToInt32(textBoxNumberOfUsers.Text);
-            if(count > MAX_TO_SIGN_UP || count < MIN_TO_SIGN_UP)
+            numberOfPlayers = Convert.ToInt32(textBoxNumberOfUsers.Text);
+            if(numberOfPlayers > MAX_TO_SIGN_UP || numberOfPlayers < MIN_TO_SIGN_UP)
             {
                 lblValideNumberOfUsers.Text = "Invalid number of users";
                 lblValideNumberOfUsers.ForeColor = Color.Red;
@@ -497,9 +509,17 @@ namespace WebApplication3
 
                 textBoxNumberOfUsers.Text = "";
                 showPanel("signUp");
+            } 
+            else
+            {
+                lblSignUpControl.Text = "";
+                lblSignUpControl.Visible = false;
+                textBoxNumberOfUsers.Text = "";
+                initSignUp();
+                lblUserContainerNumberOfUsers.Text = numberOfPlayers.ToString();
+                configSignUp(numberOfPlayers);
+                showPanel("userControl");
             }
-            CongigSignUp(count);
-            showPanel("userControl");
         }
 
         protected void UsersDropDownList_SelectedIndexChanged(object sender, EventArgs e)
@@ -613,7 +633,7 @@ namespace WebApplication3
 
         protected void btnSignUp_Click(object sender, EventArgs e)
         {
-            int numberOfUsers = Convert.ToInt32(lblUserContainerNumberOfUsers.Text);
+            //int numberOfUsers = Convert.ToInt32(lblUserContainerNumberOfUsers.Text);
             String result = String.Empty;
             List<Player> players = new List<Player>(); 
             string lastName = txtSignUpFamilyName.Text;
@@ -629,14 +649,20 @@ namespace WebApplication3
                 foreach(Player p in players)
                 {
                     bool isAddedPlayer = restCalls.AddPlayer(p);
-                    if (!isAddedPlayer)
-                    {
-                        result += "Problem occur while adding " + p.Name + "\n";
-                    }
+                    if (!isAddedPlayer) { result += "Problem occur while adding " + p.Name + "\n"; }
                 }
+                if(String.IsNullOrEmpty(result))
+                {
+                    lblLoginSuccess.Text = "Successfully sign up";
+                    initSignUp();
+                    showPanel("login susscess");
+                }
+            } else
+            {
+                lblSignUpControl.Text = "Something went worng while adding family";
+                lblSignUpControl.Visible = true;
+                showPanel("userControl");
             }
-
-
         }
         
         private void registerToGame(String gameID)
@@ -733,12 +759,30 @@ namespace WebApplication3
 
         protected void btnDeleteUser_Click(object sender, EventArgs e)
         {
-
+            int numberOfUsers = numberOfPlayers - 1;
+            numberOfPlayers--;
+            if (numberOfUsers > MIN_TO_SIGN_UP)
+            {
+                lblSignUpControl.Text = "Something went worng while removing player";
+                lblSignUpControl.Visible = true;
+            }
+            else { configSignUp(numberOfUsers); }
+            showPanel("userControl");
         }
 
         protected void btnAddPlayer_Click(object sender, EventArgs e)
         {
 
+            int numberOfUsers = numberOfPlayers + 1;
+            numberOfPlayers ++;
+              //  Convert.ToInt32(lblUserContainerNumberOfUsers.Text) + 1;
+            if (numberOfUsers < MAX_TO_SIGN_UP)
+            {
+                lblSignUpControl.Text = "Something went worng while adding player";
+                lblSignUpControl.Visible = true;
+            }
+            else { configSignUp(numberOfUsers); }
+            showPanel("userControl");
         }
     }
 

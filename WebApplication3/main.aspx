@@ -233,12 +233,13 @@
                     <div class="imgContainer">
                         <img src="Images/man.jpg" alt="Avatar" class="avatar" />
                     </div>
-                    <asp:Label ID="Label1" runat="server" Text="You can register as family with 5 people" />
+                    <asp:Label ID="Label1" runat="server" Text="You can register as family with 5 people" /><br />
                     <b>many users to sign up?</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <asp:TextBox ID="textBoxNumberOfUsers" runat="server" Width="55px" Height="16px"></asp:TextBox> <br/>
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ForeColor="Red" ErrorMessage="Number of users is required" 
                         ControlToValidate="textBoxNumberOfUsers" />
-                    <asp:button ID="btnNumberOfUsers" runat="server" Text="Sign up" OnClick="btnNumberOfUsers_Click" />
+                    <br /><br />
+                    <asp:button ID="btnNumberOfUsers" runat="server" Text="Sign up" OnClick="btnNumberOfUsers_Click" /><br />
 
                     <asp:Label ID="lblValideNumberOfUsers" runat="server" Font-Bold="True" 
                             Font-Names="Comic Sans MS" Font-Size="X-Large" Visible="false"/> <br /><br />
@@ -253,9 +254,9 @@
 
                     <asp:Button ID="btnSignUp" runat="server" Text="Submit" OnClick="btnSignUp_Click" /> 
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <asp:Button ID="btnAddPlayer" runat="server" Text="Add Player" OnClick="btnAddPlayer_Click"/>
+                    <asp:Button ID="btnAddPlayer" runat="server" Text="Add Player" OnClick="btnAddPlayer_Click" CausesValidation="false"/>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <asp:Button ID="btnDeleteUser" runat="server" Text="Remove Player" OnClick="btnDeleteUser_Click"/>
+                    <asp:Button ID="btnDeleteUser" runat="server" Text="Remove Player" OnClick="btnDeleteUser_Click" CausesValidation="false"/>
                      <br />
                      <asp:Label ID="lblSignUpControl" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="X-Large" />
                      <br />
