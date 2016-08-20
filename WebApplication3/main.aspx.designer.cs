@@ -103,6 +103,15 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.Panel homePanel;
         
         /// <summary>
+        /// lblUserHome control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUserHome;
+        
+        /// <summary>
         /// askUsPanel control.
         /// </summary>
         /// <remarks>
@@ -211,15 +220,6 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.Image imgToggle3;
         
         /// <summary>
-        /// UpdatePanel1 control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel1;
-        
-        /// <summary>
         /// pnlInfo3 control.
         /// </summary>
         /// <remarks>
@@ -227,6 +227,15 @@ namespace WebApplication3 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlInfo3;
+        
+        /// <summary>
+        /// lblPlayerGames control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPlayerGames;
         
         /// <summary>
         /// pnlHeader4 control.
@@ -256,15 +265,6 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.Image imgToggle4;
         
         /// <summary>
-        /// UpdatePanel control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.UpdatePanel UpdatePanel;
-        
-        /// <summary>
         /// pnlInfo4 control.
         /// </summary>
         /// <remarks>
@@ -272,6 +272,15 @@ namespace WebApplication3 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Panel pnlInfo4;
+        
+        /// <summary>
+        /// lblGamesPlayers control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblGamesPlayers;
         
         /// <summary>
         /// pnlHeader5 control.
@@ -1055,5 +1064,23 @@ namespace WebApplication3 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.LinkButton linkSignOut;
+        
+        /// <summary>
+        /// Label2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label Label2;
+        
+        /// <summary>
+        /// lblUserConnected control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblUserConnected;
     }
 }

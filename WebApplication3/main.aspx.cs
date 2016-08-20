@@ -76,8 +76,18 @@ namespace WebApplication3
 
         protected void linkSignUp_Click(object sender, EventArgs e)
         {
-            lblValideNumberOfUsers.Visible = false;
-            showPanel("signUp");
+            if(Session["UserID"] != null)
+            {
+                lblUserHome.Text = Session["userName"].ToString() + " Connected";
+                lblUserHome.Visible = true;
+                lblUserConnected.Visible = true;
+                showPanel("homePanel");
+            }
+            else
+            {
+                lblValideNumberOfUsers.Visible = false;
+                showPanel("signUp");
+            }
         }
 
         protected void linkSignOut_Click(object sender, EventArgs e)
@@ -87,6 +97,9 @@ namespace WebApplication3
             Session["userName"] = null;
             Session["Family"] = null;
             Session["numberOfVisiting"] = 0;
+            lblUserConnected.Text = "";
+            lblValideNumberOfUsers.Visible = false;
+            lblValideNumberOfUsers.Text = "";
             showPanel("homePanel");
         }
 
@@ -99,6 +112,8 @@ namespace WebApplication3
             }
             else
             {
+                lblPlayerGames.Visible = false;
+                lblGamesPlayers.Visible = false;
                 showPanel("askUs");
             }
         }
@@ -370,14 +385,15 @@ namespace WebApplication3
             switch (signUpCount)
             {
                 case 1:
-                    enableUser1(true);
                     ruvFamily.Enabled = false;
+                    enableUser1(true);
                     enableUser2(false);
                     enableUser3(false);
                     enableUser4(false);
                     enableUser5(false);
                     break;
                 case 2:
+                    ruvFamily.Enabled = true;
                     enableUser1(true);
                     enableUser2(true);
                     enableUser3(false);
@@ -385,6 +401,7 @@ namespace WebApplication3
                     enableUser5(false);
                     break;
                 case 3:
+                    ruvFamily.Enabled = true;
                     enableUser1(true);
                     enableUser2(true);
                     enableUser3(true);
@@ -392,6 +409,7 @@ namespace WebApplication3
                     enableUser5(false);
                     break;
                 case 4:
+                    ruvFamily.Enabled = true;
                     enableUser1(true);
                     enableUser2(true);
                     enableUser3(true);
@@ -399,6 +417,7 @@ namespace WebApplication3
                     enableUser5(false);
                     break;
                 case 5:
+                    ruvFamily.Enabled = true;
                     enableUser1(true);
                     enableUser2(true);
                     enableUser3(true);
@@ -496,6 +515,7 @@ namespace WebApplication3
                 showPanel("login failed");
             } else
             {
+                lblUserConnected.Text = player.Name;
                 Session["UserID"] = player.Id;
                 Session["password"] = password;
                 Session["userName"] = player.Name;
@@ -536,16 +556,35 @@ namespace WebApplication3
             ListItem item = UsersDropDownList.SelectedItem;
             if (item != null && !String.IsNullOrEmpty(item.Value))
             {
-                List<Game> games = restCalls.GetGameByPlayerId(item.Value);
-                Table gamesByPlayerID = createGamesTable(games);
-                pnlInfo3.Controls.Add(gamesByPlayerID);
+                if(Convert.ToInt32(item.Value) != -1)
+                {
+                    List<Game> games = restCalls.GetGameByPlayerId(item.Value);
+                    if(games.Count > 0)
+                    {
+                        Table gamesByPlayerID = createGamesTable(games);
+                        pnlInfo3.Controls.Add(gamesByPlayerID);
+                    }
+                    else
+                    {
+                        lblPlayerGames.Text = "There is now games for " + item.Text;
+                        lblPlayerGames.Visible = true;
+                    }
+                    pnlInfo3.Visible = true;
+                    imgToggle3.ImageUrl = "~/images/ic_collapse.png";
+                }
+                else
+                {
+                    pnlInfo3.Visible = false;
+                    imgToggle3.ImageUrl = "~/images/ic_expand_more_48px-128.png";
+                }
             }
-         
+            showPanel("askUs");
         }
 
         protected void UsersDropDownList_Init(object sender, EventArgs e)
         {
             List<Player> players = restCalls.GetPlayers();
+            players.Insert(0, new Player { Name = "", Id = -1 });
             UsersDropDownList.DataTextField = "Name";
             UsersDropDownList.DataValueField = "ID";
             UsersDropDownList.DataSource = players;
@@ -554,10 +593,13 @@ namespace WebApplication3
 
         protected void gamesDropDownList_Init(object sender, EventArgs e)
         {
-            gamesDropDownList.DataTextField = "CreatedDateTime";
+            List<Game> games = restCalls.GetGames();
+            games.Insert(0, new Game { Id = -1 });
+            gamesDropDownList.DataTextField = "ID";
             gamesDropDownList.DataValueField = "ID";
-            gamesDropDownList.DataSource = Games;
+            gamesDropDownList.DataSource = games;
             gamesDropDownList.DataBind();
+
         }
 
         protected void gamesDropDownList_SelectedIndexChanged(object sender, EventArgs e)
@@ -565,10 +607,29 @@ namespace WebApplication3
             ListItem item = gamesDropDownList.SelectedItem;
             if (item != null && !String.IsNullOrEmpty(item.Value))
             {
-                List<Player> players = restCalls.GetPlayersByGameId(item.Value);
-                Table playersByGameID = createPlayersTable(players);
-                pnlInfo4.Controls.Add(playersByGameID);
+                if(Convert.ToInt32(item.Value) != -1)
+                {
+                    List<Player> players = restCalls.GetPlayersByGameId(item.Value);
+                    if(players.Count > 0)
+                    {
+                        Table playersByGameID = createPlayersTable(players);
+                        pnlInfo4.Controls.Add(playersByGameID);
+                    }
+                    else
+                    {
+                        lblGamesPlayers.Text = "No Players for Games" + item.Value;
+                        lblGamesPlayers.Visible = true;
+                    }
+                    pnlInfo4.Visible = true;
+                    imgToggle4.ImageUrl = "~/images/ic_collapse.png";
+                }
+                else
+                {
+                    pnlInfo4.Visible = false;
+                    imgToggle4.ImageUrl = "~/images/ic_expand_more_48px-128.png";
+                }
             }
+            showPanel("askUs");
         }
 
         protected void btnUpdateInfo_Click(object sender, EventArgs e)
@@ -599,6 +660,8 @@ namespace WebApplication3
                     Session["password"] = updatePassword;
                     Session["userName"] = updateUserName;
                     Session["Family"] = updateFamily;
+                    lblUserConnected.Text = Session["userName"].ToString();
+
                 } else
                 {
                     lblUpdates.Text = "Something Went Worng :(";
@@ -678,35 +741,43 @@ namespace WebApplication3
             bool registerSuccess = false;
             bool addPlayer = false;
             Game g = restCalls.GetGameById(gameID);
-            Player p = restCalls.GetPlayerById(Session["UserID"].ToString());
-            if (g.Player1 == null || !g.Player1.Equals(p))
+            if (g != null)
             {
-                g.Player1 = p;
-                addPlayer = true;
-            }
-            else if (g.Player1 != null && g.Player2 == null)
-            {
-                g.Player2 = p;
-                addPlayer = true;
-            }
-            if (addPlayer)
-            {
-                registerSuccess = restCalls.UpdateGame(g);
-                if (registerSuccess)
+                Player p = restCalls.GetPlayerById(Session["UserID"].ToString());
+                if (g.Player1 == null || g.Player1.Equals(p))
                 {
-                    lblGamePanel.ForeColor = Color.Green;
-                    lblGamePanel.Text = "Successfully Register to game" + gameID;
+                    g.Player1 = p;
+                    addPlayer = true;
+                }
+                else if (g.Player1 != null && !g.Player1.Equals(p) && g.Player2 == null)
+                {
+                    g.Player2 = p;
+                    addPlayer = true;
+                }
+                if (addPlayer)
+                {
+                    registerSuccess = restCalls.UpdateGame(g);
+                    if (registerSuccess)
+                    {
+                        lblGamePanel.ForeColor = Color.Green;
+                        lblGamePanel.Text = "Successfully Register to game" + gameID;
+                    }
+                    else
+                    {
+                        lblGamePanel.ForeColor = Color.Red;
+                        lblGamePanel.Text = "Something went worng. please try again";
+                    }
                 }
                 else
                 {
                     lblGamePanel.ForeColor = Color.Red;
-                    lblGamePanel.Text = "Something went worng. please try again";
+                    lblGamePanel.Text = "Cannot Register to game";
                 }
             }
             else
             {
                 lblGamePanel.ForeColor = Color.Red;
-                lblGamePanel.Text = "Cannot Register to game";
+                lblGamePanel.Text = "Game not found";
             }
             lblGamePanel.Visible = true;
             showPanel("games");
@@ -774,6 +845,7 @@ namespace WebApplication3
             if (numberOfUsers < MIN_TO_SIGN_UP)
             {
                 lblSignUpControl.Text = "Something went worng while removing player";
+                Session["numberOfPlayers"] = 0;
                 lblSignUpControl.Visible = true;
             }
             else
@@ -813,5 +885,10 @@ namespace WebApplication3
         public String Player1 { get; set; }
         public String Player2 { get; set; }
         public String WinnerPlayerNum { get; set; }
+
+        public override string ToString()
+        {
+            return "Game ID" + Id;
+        }
     }
 }

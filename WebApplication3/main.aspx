@@ -30,6 +30,7 @@
             <div id="content_area" runat="server">
                <asp:PlaceHolder ID="PlaceHolder1" runat="server" EnableViewState="false"></asp:PlaceHolder>
                 <asp:Panel runat="server" ID="homePanel">
+                   <asp:Label ID="lblUserHome" runat="server" Visible="false" Font-Bold="true" Font-Size="Large" ForeColor="Red" Font-Names="Comic Sans MS" />
                    <h2>Some on Checkers</h2>
                    <h3>
                        Draughts or checkers (American English) is a group of strategy board games for two players which involve diagonal moves of uniform game pieces and mandatory captures by jumping over opponent pieces. 
@@ -82,8 +83,9 @@
                     <br />                               
                        
                         <asp:Panel ID="pnlHeader3" runat="server" Width="750px" BackColor="#00CC99" Height="50px">
-                        Get all Games for user:
-                            <asp:DropDownList ID="UsersDropDownList" runat="server" AutoPostBack="true" 
+                        Get all Games for player:&nbsp;&nbsp;&nbsp;&nbsp;
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <asp:DropDownList ID="UsersDropDownList" runat="server" AutoPostBack="true" Height="16px" Width="156px"
                                 EnableViewState="true" OnInit="UsersDropDownList_Init" 
                                 OnSelectedIndexChanged="UsersDropDownList_SelectedIndexChanged" ViewStateMode="Enabled">
                             </asp:DropDownList>
@@ -92,38 +94,27 @@
                                 style="margin-left: 637px" Width="28px" />
                         </asp:Panel>
                             
-                        <asp:UpdatePanel ID="UpdatePanel1" runat="server" OnUnload="UpdatePanel_UnLoad">
-                            <ContentTemplate>
-                            <asp:Panel ID="pnlInfo3" runat="server" BackColor="Silver" Width="750px">
+                        <asp:Panel ID="pnlInfo3" runat="server" BackColor="Silver" Width="750px" Visible="false">
+                                <asp:Label ID="lblPlayerGames" runat="server" Visible="false"></asp:Label>
                                 <br />
-                            </asp:Panel>   
-                            </ContentTemplate>
-                            <Triggers>
-                            <asp:AsyncPostBackTrigger ControlID="UsersDropDownList" EventName="SelectedIndexChanged" />
-                            </Triggers>
-                        </asp:UpdatePanel>    
+                        </asp:Panel>   
                    
                     <br />
                     <br />
 
                         <asp:Panel ID="pnlHeader4" runat="server" Width="750px" BackColor="#00CC99" Height="50px">
-                        Get all Users for game:  &nbsp;&nbsp;&nbsp;&nbsp;
+                        Get all players for game:  &nbsp;&nbsp;&nbsp;&nbsp;
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <asp:DropDownList ID="gamesDropDownList" runat="server" AutoPostBack="true" EnableViewState="true" Height="16px" OnInit="gamesDropDownList_Init" OnSelectedIndexChanged="gamesDropDownList_SelectedIndexChanged" ViewStateMode="Enabled" Width="156px">
+                            <asp:DropDownList ID="gamesDropDownList" runat="server" AutoPostBack="true" EnableViewState="true" Height="16px" OnInit="gamesDropDownList_Init" 
+                                OnSelectedIndexChanged="gamesDropDownList_SelectedIndexChanged" ViewStateMode="Enabled" Width="156px">
                             </asp:DropDownList>
                             <asp:Image ID="imgToggle4" runat="server" Height="19px" ImageUrl="/Images/ic_expand_more_48px-128.png" style="margin-left: 637px" Width="28px" />
                         </asp:Panel>
 
-                        <asp:UpdatePanel ID="UpdatePanel" runat="server" OnUnload="UpdatePanel_UnLoad">
-                            <ContentTemplate>
-                            <asp:Panel ID="pnlInfo4" runat="server" BackColor="Silver" Width="750px">
-                                <br />
-                            </asp:Panel>
-                        </ContentTemplate>
-                        <Triggers>
-                            <asp:AsyncPostBackTrigger ControlID="gamesDropDownList" EventName="SelectedIndexChanged" />
-                        </Triggers>
-                        </asp:UpdatePanel>                
+                       <asp:Panel ID="pnlInfo4" runat="server" BackColor="Silver" Width="750px" Visible="false">
+                           <asp:Label ID="lblGamesPlayers" runat="server" Visible="false"></asp:Label>
+                            <br />
+                       </asp:Panel>                
                        
                     <br />
                     <br />
@@ -169,8 +160,8 @@
                          <br />
 
                          <br />
-                        <asp:Button ID="btnUpdateInfo" runat="server" Text ="Save Changes" OnClick="btnUpdateInfo_Click"/>&nbsp;&nbsp;&nbsp;
-                        <asp:Button ID="deleteUser" runat="server" Text="Delete User" Width="118px" OnClick="deleteUser_Click" />
+                        <asp:Button ID="btnUpdateInfo" runat="server" Text ="Save Changes" OnClick="btnUpdateInfo_Click" CssClass="buttonbottem"/>&nbsp;&nbsp;&nbsp;
+                        <asp:Button ID="deleteUser" runat="server" Text="Delete User" Width="118px" OnClick="deleteUser_Click" CssClass="buttonbottem"/>
                 
                         <br /><br />
                     </ContentTemplate>
@@ -179,18 +170,19 @@
                 <asp:Panel ID="gamesPanel" runat="server">
                     <asp:Label ID="lblGamePanel" runat="server" Font-Bold="True" 
                             Font-Names="Comic Sans MS" Font-Size="X-Large" Visible="false"/> <br /><br />
-                    <asp:Repeater ID="Repeater1" runat="server" >
+                    <asp:Repeater ID="Repeater1" runat="server">
                         <ItemTemplate>
                             <div>
-                                <table border="1">
-                                    <tr><th colspan="2">Game <%#Eval("Id")%></th></tr>
-                                    <tr><td>Game Id: </td><td><%#Eval("Id")%></td></tr>
-                                    <tr><td>Crated at: </td><td><%#Eval("CreatedDateTime")%></td></tr>
-                                    <tr><td>Status: </td><td><%#Eval("GameStatus")%></td></tr>
-                                    <tr><td>Player1: </td><td><%#Eval("Player1")%></td></tr>
-                                    <tr><td>Player2: </td><td><%#Eval("Player2")%></td></tr>
-                                    <tr><td>Winner: </td><td><%#Eval("WinnerPlayerNum")%></td></tr>
+                                <table>
+                                    <tr><th colspan="2" style="background-color:aquamarine">Game <%#Eval("Id")%></th></tr>
+                                    <tr style="background-color:gainsboro"><td>Game Id: </td><td><%#Eval("Id")%></td></tr>
+                                    <tr style="background-color:gainsboro"><td>Crated at: </td><td><%#Eval("CreatedDateTime")%></td></tr>
+                                    <tr style="background-color:gainsboro"><td>Status: </td><td><%#Eval("GameStatus")%></td></tr>
+                                    <tr style="background-color:gainsboro"><td>Player1: </td><td><%#Eval("Player1")%></td></tr>
+                                    <tr style="background-color:gainsboro"><td>Player2: </td><td><%#Eval("Player2")%></td></tr>
+                                    <tr style="background-color:gainsboro"><td>Winner: </td><td><%#Eval("WinnerPlayerNum")%></td></tr>
                                 </table>
+                                <br />
                             </div>
                         </ItemTemplate>
                     </asp:Repeater>
@@ -199,9 +191,9 @@
                     <asp:RequiredFieldValidator ID="RequiredFieldValidatorGameID" runat="server" ForeColor="Red" ErrorMessage="Game id is required"
                         ControlToValidate="txtGameID" />
                     <br />
-                    <asp:Button ID="btnCreateGame" runat="server" Text="New game" OnClick="btnCreateGame_Click" CausesValidation="false"/>&nbsp;&nbsp;
-                    <asp:Button ID="btnRegisterGame" runat="server" Text="Register" OnClick="btnRegisterGame_Click" /> &nbsp;&nbsp;
-                    <asp:Button ID="btnDeleteGame" runat="server" Text="Delete" OnClick="btnDeleteGame_Click" />
+                    <asp:Button ID="btnCreateGame" runat="server" Text="New game" OnClick="btnCreateGame_Click" CausesValidation="false" CssClass="buttonbottem"/>&nbsp;&nbsp;
+                    <asp:Button ID="btnRegisterGame" runat="server" Text="Register" OnClick="btnRegisterGame_Click" CssClass="buttonbottem"/> &nbsp;&nbsp;
+                    <asp:Button ID="btnDeleteGame" runat="server" Text="Delete" OnClick="btnDeleteGame_Click"  CssClass="buttonbottem"/>
                     <br /><br />
                     <asp:Label ID="lblControlGame" runat="server" Font-Bold="true" />
                 </asp:Panel>
@@ -224,7 +216,7 @@
                         <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ForeColor="Red" ErrorMessage="Password id is required" 
                             ControlToValidate="textBoxSignInPsw" />
                         <br />
-                        <asp:Button ID="btnSignIn" runat="server" Text="Login" OnClick="btnSignIn_Click"/>
+                        <asp:Button ID="btnSignIn" runat="server" Text="Login" OnClick="btnSignIn_Click" CssClass="buttonbottem"/>
                     </div>
                 </asp:Panel>
 
@@ -239,7 +231,7 @@
                     <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ForeColor="Red" ErrorMessage="Number of users is required" 
                         ControlToValidate="textBoxNumberOfUsers" />
                     <br /><br />
-                    <asp:button ID="btnNumberOfUsers" runat="server" Text="Sign up" OnClick="btnNumberOfUsers_Click" /><br />
+                    <asp:button ID="btnNumberOfUsers" runat="server" Text="Sign up" OnClick="btnNumberOfUsers_Click" CssClass="buttonbottem"/><br />
 
                     <asp:Label ID="lblValideNumberOfUsers" runat="server" Font-Bold="True" 
                             Font-Names="Comic Sans MS" Font-Size="X-Large" Visible="false"/> <br /><br />
@@ -252,11 +244,11 @@
                             Font-Names="Comic Sans MS" Font-Size="X-Large" ForeColor="#00cc99"/>
                      <br /><br />
 
-                    <asp:Button ID="btnSignUp" runat="server" Text="Submit" OnClick="btnSignUp_Click" /> 
+                    <asp:Button ID="btnSignUp" runat="server" Text="Submit" OnClick="btnSignUp_Click" CssClass="buttonbottem"/> 
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <asp:Button ID="btnAddPlayer" runat="server" Text="Add Player" OnClick="btnAddPlayer_Click" CausesValidation="false"/>
+                    <asp:Button ID="btnAddPlayer" runat="server" Text="Add another player" OnClick="btnAddPlayer_Click" CausesValidation="false" CssClass="buttonbottem"/>
                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <asp:Button ID="btnDeleteUser" runat="server" Text="Remove Player" OnClick="btnDeleteUser_Click" CausesValidation="false"/>
+                    <asp:Button ID="btnDeleteUser" runat="server" Text="Remove player" OnClick="btnDeleteUser_Click" CausesValidation="false" CssClass="buttonbottem"/>
                      <br />
                      <asp:Label ID="lblSignUpControl" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="X-Large" />
                      <br />
@@ -367,6 +359,12 @@
                 <asp:LinkButton ID="linksignUp" runat="server" Text="Sign up" OnClick="linkSignUp_Click" CausesValidation="false"/><br />
                 <asp:LinkButton ID="linkSignIn" runat="server" Text="Log in" OnClick="linkSignIn_Click" CausesValidation="false"/><br />
                 <asp:LinkButton ID="linkSignOut" runat="server" Text="Log Out" OnClick="linkSignOut_Click" CausesValidation="false" />
+                <br /><br /><br />
+                <br />
+                <br />
+                <br />
+                <asp:Label ID="Label2" runat="server" Text="Connected as: "></asp:Label>
+                <asp:Label ID="lblUserConnected" runat="server"/>
             </div>
             <div id="footer">
                 <p>Dotnet final project - August 2016</p>

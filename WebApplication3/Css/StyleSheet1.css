@@ -128,14 +128,14 @@ img.avatar {
     padding: 16px;
 }
 
-button {
-    background-color: #4CAF50;
+.buttonbottem {
+    background-color: #009999;
     color: white;
     padding: 14px 20px;
     margin: 8px 0;
     border: none;
     cursor: pointer;
-    width: 100%;
+    
 }
 
 input[type=text], input[type=password] {
@@ -145,3 +145,5 @@ input[type=text], input[type=password] {
     border: 1px solid #ccc;
     box-sizing: border-box;
 }
+
+
