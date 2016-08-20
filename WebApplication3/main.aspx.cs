@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel.Web;
@@ -28,7 +29,6 @@ namespace WebApplication3
             createTableUsers();
             createTableGames();
             createNumOfGamesPerPlayer();
-            
 
             if (!IsPostBack)
             {
@@ -39,22 +39,18 @@ namespace WebApplication3
                 Session["numberOfVisiting"] = 0;
                 showPanel("homePanel");
                 updateGameRepater();
-            }
-
-            foreach(RepeaterItem  ritem in Repeater1.Items)
-            {
-                Button btn = ritem.FindControl("btnRegisterGame") as Button;
-                btn.Click += new EventHandler(btnRegisterGame_Click);
-                btn = ritem.FindControl("btnDeleteGame") as Button;
-                btn.Click += new EventHandler(btnDeleteGame_Click);
-            }
-
+            
+            }          
         }
 
 
         private void updateGameRepater()
         {
-            Repeater1.DataSource = Games;
+            
+            Repeater1.DataSource =
+                from g in Games
+                select new FormatedGame { Id = g.Id.ToString(), CreatedDateTime = g.CreatedDateTime, GameStatus = g.GameStatus,
+                                         Player1 = g.Player1.Name, Player2 = g.Player2.Name, WinnerPlayerNum = g.WinnerPlayerNum.ToString()};
             Repeater1.DataBind();
         }
 
@@ -107,9 +103,10 @@ namespace WebApplication3
             else
             {
                 txtIDLabel.Text = Session["UserID"].ToString();
-                lblUpdateSavedSuccess.Visible = false;
-                lblUpdateSavedFailed.Visible = false;
-                lblUpdateNoChanges.Visible = false;
+                txtUpdateInfoUserName.Text = Session["userName"].ToString();
+                txtUpdateInfoUserLastName.Text = Session["Family"].ToString();
+                txtUpdateInfoUserPassword.Text = Session["password"].ToString();
+                lblUpdates.Visible = false;
                 showPanel("updates");
             }
         }
@@ -123,6 +120,13 @@ namespace WebApplication3
             }
             else
             {
+                updateGameRepater();
+                if (Repeater1.Items.Count > 0) { lblGamePanel.Visible = false; }
+                else
+                {
+                    lblGamePanel.Text = "No games to show";
+                    lblGamePanel.Visible = true;
+                }
                 showPanel("games");
             }
         }
@@ -358,7 +362,7 @@ namespace WebApplication3
             } else
             {
                 Session["UserID"] = player.Id;
-                Session["password"] = player.Password;
+                Session["password"] = password;
                 Session["userName"] = player.Name;
                 Session["Family"] = player.Family.Name;
                 Session["numberOfVisiting"] = (int)Session["numberOfVisiting"] + 1;
@@ -452,10 +456,9 @@ namespace WebApplication3
 
         protected void gamesDropDownList_Init(object sender, EventArgs e)
         {
-            List<Game> games = restCalls.GetGames();
             gamesDropDownList.DataTextField = "CreatedDateTime";
             gamesDropDownList.DataValueField = "ID";
-            gamesDropDownList.DataSource = games;
+            gamesDropDownList.DataSource = Games;
             gamesDropDownList.DataBind();
         }
 
@@ -497,31 +500,31 @@ namespace WebApplication3
                 if(saved)
                 {
 
-                    lblUpdateSavedSuccess.Visible = true;
-                    lblUpdateSavedFailed.Visible = false;
-                    lblUpdateNoChanges.Visible = false;
+                    lblUpdates.Text = "Changes saved Successfully :)";
+                    lblUpdates.ForeColor = Color.Green;
+                    lblUpdates.Visible = true;
 
                     Session["password"] = updatePassword;
                     Session["userName"] = updateUserName;
                     Session["Family"] = updateFamily;
                 } else
                 {
-                    lblUpdateSavedSuccess.Visible = false;
-                    lblUpdateSavedFailed.Visible = true;
-                   lblUpdateNoChanges.Visible = false;
-                    
+                    lblUpdates.Text = "Something Went Worng :(";
+                    lblUpdates.ForeColor = Color.Red;
+                    lblUpdates.Visible = true;
                 }
             }
             else
             {
-                lblUpdateSavedSuccess.Visible = false;
-                lblUpdateSavedFailed.Visible = false;
-                lblUpdateNoChanges.Visible = true;
+                lblUpdates.Text = "No changes has made :|";
+                lblUpdates.ForeColor = Color.Blue;
+                lblUpdates.Visible = true;
             }
-           // txtUpdateInfoUserName.Text = updateUserName;
-          //  txtUpdateInfoUserLastName.Text = updateFamily;
-          //  txtUpdateInfoUserPassword.Text = updatePassword;
-           // showPanel("updates");
+
+            txtUpdateInfoUserName.Text = updateUserName;
+            txtUpdateInfoUserLastName.Text = updateFamily;
+            txtUpdateInfoUserPassword.Text = updatePassword;
+            showPanel("updates");
         }
 
         protected void deleteUser_Click(object sender, EventArgs e)
@@ -538,9 +541,10 @@ namespace WebApplication3
             }
             else
             {
-                lblUpdateSavedSuccess.Visible = false;
-                lblUpdateSavedFailed.Visible = true;
-                lblUpdateNoChanges.Visible = false;
+                lblUpdates.Text = "Something Went Worng :(";
+                lblUpdates.ForeColor = Color.Red;
+                lblUpdates.Visible = true;
+                showPanel("updates");
             }
         }
 
@@ -549,15 +553,106 @@ namespace WebApplication3
 
         }
         
-        private void btnDeleteGame_Click(object sender, EventArgs e)
+        private void registerToGame(String gameID)
         {
-            throw new NotImplementedException();
+            bool registerSuccess = false;
+            bool addPlayer = false;
+            Game g = (Game)Games.Where(game => game.Id.Equals(gameID));
+            Player p = restCalls.GetPlayerById(Session["UserID"].ToString());
+            if (g.Player1 == null)
+            {
+                g.Player1 = p;
+                addPlayer = true;
+            }
+            else if (g.Player1 != null && g.Player2 == null)
+            {
+                g.Player2 = p;
+                addPlayer = true;
+            }
+            if (addPlayer)
+            {
+                registerSuccess = restCalls.UpdateGame(g);
+                if (registerSuccess)
+                {
+                    lblGamePanel.ForeColor = Color.Green;
+                    lblGamePanel.Text = "Successfully Register to game" + gameID;
+                }
+                else
+                {
+                    lblGamePanel.ForeColor = Color.Red;
+                    lblGamePanel.Text = "Something went worng. please try again";
+                }
+            }
+            else
+            {
+                lblGamePanel.ForeColor = Color.Red;
+                lblGamePanel.Text = "Cannot Register to game";
+            }
+            lblGamePanel.Visible = true;
+            showPanel("games");
         }
 
-        private void btnRegisterGame_Click(object sender, EventArgs e)
+        protected void btnCreateGame_Click(object sender, EventArgs e)
         {
-            Button btn = (Button)sender;
+            Game game = new Game();
+            Player p = restCalls.GetPlayerById(Session["UserID"].ToString());
+            game.Player1 = p;
+            bool addGameSuccess = restCalls.AddGame(game);
+            txtGameID.Text = "";
+            if (addGameSuccess)
+            {
+                Games = restCalls.GetGames();
+                updateGameRepater();
+                lblGamePanel.ForeColor = Color.Green;
+                lblGamePanel.Text = "Successfully created new game";
+            }
+            else
+            {
+                lblGamePanel.ForeColor = Color.Red;
+                lblGamePanel.Text = "Something went worng. please try again";
+            }
+            lblGamePanel.Visible = true;
+            showPanel("games");
             
         }
+
+        protected void btnRegisterGame_Click(object sender, EventArgs e)
+        {
+            if (Page.IsValid)
+            {
+                registerToGame(txtGameID.Text);
+            }
+        }
+
+        protected void btnDeleteGame_Click(object sender, EventArgs e)
+        {
+            bool deletedSuccess = restCalls.RemoveGame(txtGameID.Text);
+            if (deletedSuccess)
+            {
+                Games = restCalls.GetGames();
+                updateGameRepater();
+                lblGamePanel.ForeColor = Color.Green;
+                lblGamePanel.Text = "Successfully delete game "+ txtGameID.Text;
+            }
+            else
+            {
+                lblGamePanel.ForeColor = Color.Red;
+                lblGamePanel.Text = "Something went worng. please try again";
+            }
+            txtGameID.Text = "";
+            lblGamePanel.Visible = true;
+            showPanel("games");
+            
+        }
+    }
+
+    public class FormatedGame
+    {
+        public String Id { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public Status GameStatus { get; set; }
+        public String Player1 { get; set; }
+        public String Player2 { get; set; }
+        public String WinnerPlayerNum { get; set; }
     }
 }

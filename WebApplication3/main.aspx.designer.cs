@@ -238,6 +238,15 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.Panel pnlHeader4;
         
         /// <summary>
+        /// gamesDropDownList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList gamesDropDownList;
+        
+        /// <summary>
         /// imgToggle4 control.
         /// </summary>
         /// <remarks>
@@ -254,15 +263,6 @@ namespace WebApplication3 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel UpdatePanel;
-        
-        /// <summary>
-        /// gamesDropDownList control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList gamesDropDownList;
         
         /// <summary>
         /// pnlInfo4 control.
@@ -391,31 +391,13 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.TextBox txtUpdateInfoUserPassword;
         
         /// <summary>
-        /// lblUpdateSavedSuccess control.
+        /// lblUpdates control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblUpdateSavedSuccess;
-        
-        /// <summary>
-        /// lblUpdateSavedFailed control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblUpdateSavedFailed;
-        
-        /// <summary>
-        /// lblUpdateNoChanges control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblUpdateNoChanges;
+        protected global::System.Web.UI.WebControls.Label lblUpdates;
         
         /// <summary>
         /// btnUpdateInfo control.
@@ -445,6 +427,15 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.Panel gamesPanel;
         
         /// <summary>
+        /// lblGamePanel control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblGamePanel;
+        
+        /// <summary>
         /// Repeater1 control.
         /// </summary>
         /// <remarks>
@@ -454,6 +445,33 @@ namespace WebApplication3 {
         protected global::System.Web.UI.WebControls.Repeater Repeater1;
         
         /// <summary>
+        /// lblGameID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblGameID;
+        
+        /// <summary>
+        /// txtGameID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtGameID;
+        
+        /// <summary>
+        /// RequiredFieldValidatorGameID control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator RequiredFieldValidatorGameID;
+        
+        /// <summary>
         /// btnCreateGame control.
         /// </summary>
         /// <remarks>
@@ -461,6 +479,33 @@ namespace WebApplication3 {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnCreateGame;
+        
+        /// <summary>
+        /// btnRegisterGame control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnRegisterGame;
+        
+        /// <summary>
+        /// btnDeleteGame control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnDeleteGame;
+        
+        /// <summary>
+        /// lblControlGame control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblControlGame;
         
         /// <summary>
         /// signInPanel control.
