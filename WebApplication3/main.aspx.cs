@@ -649,12 +649,11 @@ namespace WebApplication3
             bool isAddedFamily = restCalls.AddFamily(family);
             if(isAddedFamily)
             {
-                if (!String.IsNullOrEmpty(txtSignUpUserName1.Text)) { players.Add(new Player { Name = txtSignUpUserName1.Text, Password = txtSignUpPassword1.Text, Family = family }); }
-                if (!String.IsNullOrEmpty(txtSignUpUserName2.Text)) { players.Add(new Player { Name = txtSignUpUserName2.Text, Password = txtSignUpPassword2.Text, Family = family }); }
-                if (!String.IsNullOrEmpty(txtSignUpUserName3.Text)) { players.Add(new Player { Name = txtSignUpUserName3.Text, Password = txtSignUpPassword3.Text, Family = family }); }
-                if (!String.IsNullOrEmpty(txtSignUpUserName4.Text)) { players.Add(new Player { Name = txtSignUpUserName4.Text, Password = txtSignUpPassword4.Text, Family = family }); }
-                if (!String.IsNullOrEmpty(txtSignUpUserName5.Text)) { players.Add(new Player { Name = txtSignUpUserName5.Text, Password = txtSignUpPassword5.Text, Family = family }); }
-
+                if (!string.IsNullOrEmpty(txtSignUpUserName1.Text)) { players.Add(new Player { Name = txtSignUpUserName1.Text, Password = txtSignUpPassword1.Text, Family = family }); }
+                if (!string.IsNullOrEmpty(txtSignUpUserName2.Text)) { players.Add(new Player { Name = txtSignUpUserName2.Text, Password = txtSignUpPassword2.Text, Family = family }); }
+                if (!string.IsNullOrEmpty(txtSignUpUserName3.Text)) { players.Add(new Player { Name = txtSignUpUserName3.Text, Password = txtSignUpPassword3.Text, Family = family }); }
+                if (!string.IsNullOrEmpty(txtSignUpUserName4.Text)) { players.Add(new Player { Name = txtSignUpUserName4.Text, Password = txtSignUpPassword4.Text, Family = family }); }
+                if (!string.IsNullOrEmpty(txtSignUpUserName5.Text)) { players.Add(new Player { Name = txtSignUpUserName5.Text, Password = txtSignUpPassword5.Text, Family = family }); }
                 foreach (Player p in players)
                 {
                     bool isAddedPlayer = restCalls.AddPlayer(p);
