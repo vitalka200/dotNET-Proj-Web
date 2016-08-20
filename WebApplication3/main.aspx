@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="main.aspx.cs" Inherits="WebApplication3.main" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="main.aspx.cs" Inherits="WebApplication3.main" EnableEventValidation="false" ValidateRequest="false"%>
 
 <%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="ajaxToolkit" %>
 
@@ -147,7 +147,7 @@
                     <br />
             </asp:Panel>
 
-                <asp:UpdatePanel runat="server" ID="updatesPanel"  OnUnload="UpdatePanel_UnLoad">
+                <asp:UpdatePanel runat="server" ID="updatesPanel" UpdateMode="Conditional" OnUnload="UpdatePanel_UnLoad">
                     <ContentTemplate>
                          <table>
                             <tr>
@@ -174,19 +174,34 @@
                             Font-Names="Comic Sans MS" Font-Size="X-Large" ForeColor="Red" Visible="false"/><br />
 
                         <asp:Label ID="lblUpdateNoChanges" Text=" There is now changes :| " runat="server" Font-Bold="True" 
-                            Font-Names="Comic Sans MS" Font-Size="X-Large" ForeColor="#0099FF" Visible="False"/><br />
-
-                        <br />
+                            Font-Names="Comic Sans MS" Font-Size="X-Large" ForeColor="#0099FF" Visible="False"/>
+                         <br />
                         <asp:Button ID="btnUpdateInfo" runat="server" Text ="Save Changes" OnClick="btnUpdateInfo_Click"/>&nbsp;&nbsp;&nbsp;
                         <asp:Button ID="deleteUser" runat="server" Text="Delete User" Width="118px" OnClick="deleteUser_Click" />
-                    </ContentTemplate>
-                    <Triggers>
-                        <asp:AsyncPostBackTrigger ControlID="btnUpdateInfo" />
-                    </Triggers>
-                </asp:UpdatePanel>
                 
+                        <br /><br />
+                    </ContentTemplate>
+                </asp:UpdatePanel>
 
-                <asp:Panel ID="gamesPanel" runat="server" />
+                <asp:Panel ID="gamesPanel" runat="server">
+                    <asp:Repeater ID="Repeater1" runat="server">
+                        <ItemTemplate>
+                            <div>
+                                <table>
+                                    <tr><th>Game <%#Eval("Id")%></th></tr>
+                                    <tr><td>Crated at: </td><td><%#Eval("CreatedDateTime")%></td></tr>
+                                    <tr><td>Status: </td><td><%#Eval("GameStatus")%></td></tr>
+                                    <tr><td>Player1: </td><td><%#Eval("Player1.Name")%></td></tr>
+                                    <tr><td>Player2: </td><td><%#Eval("Player2.Name")%></td></tr>
+                                    <tr><td>Winner: </td><td><%#Eval("WinnerPlayerNum")%></td></tr>
+                                    <tr><td>Register to game</td><td><asp:Button ID="btnRegisterGame" runat="server" /></td></tr>
+                                    <tr><td>Delete game</td><td><asp:Button ID="btnDeleteGame" runat="server" /></td></tr>
+                                </table>
+                            </div>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                    <asp:button ID="btnCreateGame" runat="server" Text="New game" />
+                </asp:Panel>
          
 
                 <asp:Panel runat="server" ID="signInPanel">
@@ -216,10 +231,11 @@
                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <asp:Button ID="btnNumberOfUsers" runat="server" Text="Start" OnClick="btnNumberOfUsers_Click" />
                     
-                    <asp:Panel runat="server" ID="usersContainerPanel">
-                    </asp:Panel>
+                </asp:Panel>
 
-                    <asp:Button ID="btnSignUp" runat="server" Text="Submit" OnClick="btnSignUp_Click" />
+                <asp:Panel runat="server" ID="usersContainerPanel">
+                     
+                     <asp:Button ID="btnSignUp" runat="server" Text="Submit" OnClick="btnSignUp_Click" />
                 </asp:Panel>
 
                 <asp:Panel runat="server" ID="LoginSuccessPanel">

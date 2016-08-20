@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Reflection;
 using System.ServiceModel.Web;
@@ -12,18 +13,22 @@ namespace WebApplication3
     public partial class main : System.Web.UI.Page
     {
         List<Panel> allPanels = new List<Panel>();
-
-        public Repeater rpt { get; private set; }
         public RestApiCalls restCalls = new RestApiCalls();
+        public List<Game> Games { get; set; }
+        public List<Player> Players { get; set; }
 
         protected void Page_Load(object sender, EventArgs e)
         {
             initialPanel();
             disablePanelVisiable();
 
+            Games = restCalls.GetGames();
+            Players = restCalls.GetPlayers();
+
             createTableUsers();
             createTableGames();
             createNumOfGamesPerPlayer();
+            
 
             if (!IsPostBack)
             {
@@ -33,8 +38,24 @@ namespace WebApplication3
                 Session["Family"] = null;
                 Session["numberOfVisiting"] = 0;
                 showPanel("homePanel");
+                updateGameRepater();
             }
 
+            foreach(RepeaterItem  ritem in Repeater1.Items)
+            {
+                Button btn = ritem.FindControl("btnRegisterGame") as Button;
+                btn.Click += new EventHandler(btnRegisterGame_Click);
+                btn = ritem.FindControl("btnDeleteGame") as Button;
+                btn.Click += new EventHandler(btnDeleteGame_Click);
+            }
+
+        }
+
+
+        private void updateGameRepater()
+        {
+            Repeater1.DataSource = Games;
+            Repeater1.DataBind();
         }
 
         /* Events of menu options */
@@ -86,13 +107,6 @@ namespace WebApplication3
             else
             {
                 txtIDLabel.Text = Session["UserID"].ToString();
-                txtUpdateInfoUserName.Text = Session["userName"].ToString();
-                txtUpdateInfoUserLastName.Text = Session["Family"].ToString() ;
-                if(Session["password"] != null)
-                {
-                    txtUpdateInfoUserPassword.Text = Session["password"].ToString();
-                }
-                
                 lblUpdateSavedSuccess.Visible = false;
                 lblUpdateSavedFailed.Visible = false;
                 lblUpdateNoChanges.Visible = false;
@@ -196,7 +210,6 @@ namespace WebApplication3
 
         public void createNumOfGamesPerPlayer()
         {
-            List<Player> players = restCalls.GetPlayers();
             Table tblGamesCount = new Table();
 
             TableRow tRow = new TableRow();
@@ -213,7 +226,7 @@ namespace WebApplication3
 
             tblGamesCount.Rows.Add(tRow);
 
-            foreach (Player p in players)
+            foreach (Player p in Players)
             {
                 int count = restCalls.GetTotalGamesCountForPlayer(p.Id.ToString());
                 tRow = new TableRow();
@@ -234,15 +247,13 @@ namespace WebApplication3
 
         public void createTableUsers()
         {
-            List<Player> players = restCalls.GetPlayers();
-            Table tblAllUser = createPlayersTable(players);
+            Table tblAllUser = createPlayersTable(Players);
             pnlInfo1.Controls.Add(tblAllUser);
         }
 
         public void createTableGames()
         {
-            List<Game> games = restCalls.GetGames();
-            Table tblAllGames = createGamesTable(games);
+            Table tblAllGames = createGamesTable(Games);
             pnlInfo2.Controls.Add(tblAllGames);
         }
 
@@ -418,11 +429,6 @@ namespace WebApplication3
             showPanel("userControl");
         }
 
-        protected void btnSignUp_Click(object sender, EventArgs e)
-        {
-
-        }
-        
         protected void UsersDropDownList_SelectedIndexChanged(object sender, EventArgs e)
         {
             ListItem item = UsersDropDownList.SelectedItem;
@@ -479,6 +485,7 @@ namespace WebApplication3
                 bool saved = restCalls.UpdatePlayer(p);
                 if(saved)
                 {
+
                     lblUpdateSavedSuccess.Visible = true;
                     lblUpdateSavedFailed.Visible = false;
                     lblUpdateNoChanges.Visible = false;
@@ -490,7 +497,7 @@ namespace WebApplication3
                 {
                     lblUpdateSavedSuccess.Visible = false;
                     lblUpdateSavedFailed.Visible = true;
-                    lblUpdateNoChanges.Visible = false;
+                   lblUpdateNoChanges.Visible = false;
                     
                 }
             }
@@ -524,6 +531,22 @@ namespace WebApplication3
                 lblUpdateSavedFailed.Visible = true;
                 lblUpdateNoChanges.Visible = false;
             }
+        }
+
+        protected void btnSignUp_Click(object sender, EventArgs e)
+        {
+
+        }
+        
+        private void btnDeleteGame_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void btnRegisterGame_Click(object sender, EventArgs e)
+        {
+            Button btn = (Button)sender;
+            
         }
     }
 }
