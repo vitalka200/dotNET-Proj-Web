@@ -13,6 +13,9 @@ namespace WebApplication3
 {
     public partial class main : System.Web.UI.Page
     {
+        const int MAX_TO_SIGN_UP = 5;
+        const int MIN_TO_SIGN_UP = 1;
+
         List<Panel> allPanels = new List<Panel>();
         public RestApiCalls restCalls = new RestApiCalls();
         public List<Game> Games { get; set; }
@@ -67,6 +70,7 @@ namespace WebApplication3
 
         protected void linkSignUp_Click(object sender, EventArgs e)
         {
+            lblValideNumberOfUsers.Visible = false;
             showPanel("signUp");
         }
 
@@ -347,7 +351,117 @@ namespace WebApplication3
             return tblAllUser;
         }
 
+        protected bool isOldContentEqualNew(string oldContent, string newContent)
+        {
+            if (string.IsNullOrEmpty(newContent) || newContent.Equals("null")) return false;
+            return newContent.Equals(oldContent);
+        }
+
+        private void CongigSignUp(int signUpCount)
+        {
+            int visiableDisable = MAX_TO_SIGN_UP - signUpCount;
+            textBoxNumberOfUsers.Text = "";
+            lblUserContainerNumberOfUsers.Text = signUpCount.ToString();
+            switch(signUpCount)
+            {
+                case 1:
+                    enableUser1(true);
+                    enableUser2(false);
+                    enableUser3(false);
+                    enableUser4(false);
+                    enableUser5(false);
+                    break;
+                case 2:
+                    enableUser1(true);
+                    enableUser2(true);
+                    enableUser3(false);
+                    enableUser4(false);
+                    enableUser5(false);
+                    break;
+                case 3:
+                    enableUser1(true);
+                    enableUser2(true);
+                    enableUser3(true);
+                    enableUser4(false);
+                    enableUser5(false);
+                    break;
+                case 4:
+                    enableUser1(true);
+                    enableUser2(true);
+                    enableUser3(true);
+                    enableUser4(true);
+                    enableUser5(false);
+                    break;
+                case 5:
+                    enableUser1(true);
+                    enableUser2(true);
+                    enableUser3(true);
+                    enableUser4(true);
+                    enableUser5(true);
+                    break;
+            }
+            
+        }
+
+        private void enableUser5(bool enable)
+        {
+            lblSignUpUserName5.Visible = enable;
+            txtSignUpUserName5.Visible = enable;
+            lblSignUpPassword5.Visible = enable;
+            txtSignUpPassword5.Visible = enable;
+            ruvUserName5.Enabled = enable;
+            ruvPasswordUser5.Enabled = enable;
+        }
+
+        private void enableUser4(bool enable)
+        {
+            lblSignUpUserName4.Visible = enable;
+            txtSignUpUserName4.Visible = enable;
+            lblSignUpPassword4.Visible = enable;
+            txtSignUpUserName4.Visible = enable;
+            ruvUserName4.Enabled = enable;
+            ruvPasswordUser4.Enabled = enable;
+        }
+
+        private void enableUser3(bool enable)
+        {
+            lblSignUpUserName3.Visible = enable;
+            txtSignUpUserName3.Visible = enable;
+            lblSignUpPassword3.Visible = enable;
+            txtSignUpPassword3.Visible = enable;
+            ruvUserName3.Enabled = enable;
+            ruvPasswordUser3.Enabled = enable;
+        }
+
+        private void enableUser2(bool enable)
+        {
+            lblSignUpUserName2.Visible = enable;
+            txtSignUpUserName2.Visible = enable;
+            lblSignUpPassword2.Visible = enable;
+            txtSignUpPassword2.Visible = enable;
+            ruvUserName2.Enabled = enable;
+            ruvPasswordUser2.Enabled = enable;
+        }
+
+        private void enableUser1(bool enable)
+        {
+            lblSignUpUserName1.Visible = enable;
+            txtSignUpUserName1.Visible = enable;
+            lblSignUpPassword1.Visible = enable;
+            txtSignUpPassword1.Visible = enable;
+            ruvUserName1.Enabled = enable;
+            ruvPasswordUser1.Enabled = enable;
+        }
+        
         /* Events */
+        protected void UpdatePanel_UnLoad(object sender, EventArgs e)
+        {
+            MethodInfo methodInfo = typeof(ScriptManager).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
+                .Where(i => i.Name.Equals("System.Web.UI.IScriptManagerInternal.RegisterUpdatePanel")).First();
+            methodInfo.Invoke(ScriptManager.GetCurrent(Page), new object[] { sender as UpdatePanel });
+
+        }
+
         protected void btnSignIn_Click(object sender, EventArgs e)
         {
             string userName = textBoxSignInUname.Text;
@@ -358,6 +472,7 @@ namespace WebApplication3
             {
                 textBoxSignInUname.Text = "";
                 textBoxSignInPsw.Text = "";
+                lblLoginFailed.Text = "Failed to Login";
                 showPanel("login failed");
             } else
             {
@@ -366,70 +481,24 @@ namespace WebApplication3
                 Session["userName"] = player.Name;
                 Session["Family"] = player.Family.Name;
                 Session["numberOfVisiting"] = (int)Session["numberOfVisiting"] + 1;
+                lblLoginSuccess.Text = "Successfully Login";
                 showPanel("login susscess");
             }
         }
-
-        protected void UpdatePanel_UnLoad(object sender, EventArgs e)
-        {
-            MethodInfo methodInfo = typeof(ScriptManager).GetMethods(BindingFlags.NonPublic | BindingFlags.Instance)
-                .Where(i => i.Name.Equals("System.Web.UI.IScriptManagerInternal.RegisterUpdatePanel")).First();
-            methodInfo.Invoke(ScriptManager.GetCurrent(Page), new object[] { sender as UpdatePanel });
-
-        }
-
+        
         protected void btnNumberOfUsers_Click(object sender, EventArgs e)
         {
             int count = Convert.ToInt32(textBoxNumberOfUsers.Text);
-            for (int i = 0; i < count; i++)
+            if(count > MAX_TO_SIGN_UP || count < MIN_TO_SIGN_UP)
             {
-                Label lblUserName = new Label();
-                lblUserName.ID = "lblUserName" + i.ToString();
-                lblUserName.Text = "User Name:";
-                Label lblUserLastName = new Label();
-                lblUserLastName.ID = "lblUserLastName" + i.ToString();
-                lblUserLastName.Text = "Last Name:";
-                TextBox txtUserName = new TextBox();
-                txtUserName.ID = "txtUserName" + i.ToString();
-                TextBox txtUserLastName = new TextBox();
-                txtUserLastName.ID = "txtUseLastrName" + i.ToString();
+                lblValideNumberOfUsers.Text = "Invalid number of users";
+                lblValideNumberOfUsers.ForeColor = Color.Red;
+                lblValideNumberOfUsers.Visible = true;
 
-                Label lblUserPassword = new Label();
-                lblUserLastName.ID = "lblUserPassword" + i.ToString();
-                lblUserLastName.Text = "Password:";
-                TextBox txtUserPassword = new TextBox();
-                txtUserName.ID = "txtUserPassword" + i.ToString();
-                txtUserPassword.TextMode = TextBoxMode.Password;
-
-                Label lblColorChecker = new Label();
-                lblColorChecker.Text = "please choose checker color: ";
-                RadioButtonList rbl = new RadioButtonList();
-                rbl.ID = "RadioButtonList";
-                rbl.RepeatDirection = RepeatDirection.Horizontal;
-                rbl.Items.Add(new ListItem("Black"));
-                rbl.Items.Add(new ListItem("White"));
-
-                usersContainerPanel.Controls.Add(lblUserName);
-                usersContainerPanel.Controls.Add(new LiteralControl("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"));
-                usersContainerPanel.Controls.Add(txtUserName);
-                usersContainerPanel.Controls.Add(new LiteralControl("<br />"));
-
-                usersContainerPanel.Controls.Add(lblUserLastName);
-                usersContainerPanel.Controls.Add(new LiteralControl("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"));
-                usersContainerPanel.Controls.Add(txtUserLastName);
-                usersContainerPanel.Controls.Add(new LiteralControl("<br />"));
-
-                usersContainerPanel.Controls.Add(lblUserPassword);
-                usersContainerPanel.Controls.Add(new LiteralControl("&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;"));
-                usersContainerPanel.Controls.Add(txtUserPassword);
-                usersContainerPanel.Controls.Add(new LiteralControl("<br />"));
-
-                usersContainerPanel.Controls.Add(lblColorChecker);
-                usersContainerPanel.Controls.Add(new LiteralControl("<br />"));
-                usersContainerPanel.Controls.Add(rbl);
-                usersContainerPanel.Controls.Add(new LiteralControl("<br /><br /><br />"));
+                textBoxNumberOfUsers.Text = "";
+                showPanel("signUp");
             }
-            //usersContainerPanel.Visible = true;
+            CongigSignUp(count);
             showPanel("userControl");
         }
 
@@ -471,12 +540,6 @@ namespace WebApplication3
                 Table playersByGameID = createPlayersTable(players);
                 pnlInfo4.Controls.Add(playersByGameID);
             }
-        }
-
-        protected bool isOldContentEqualNew(string oldContent, string newContent)
-        {
-            if (string.IsNullOrEmpty(newContent) || newContent.Equals("null")) return false;
-            return newContent.Equals(oldContent);
         }
 
         protected void btnUpdateInfo_Click(object sender, EventArgs e)
@@ -550,6 +613,29 @@ namespace WebApplication3
 
         protected void btnSignUp_Click(object sender, EventArgs e)
         {
+            int numberOfUsers = Convert.ToInt32(lblUserContainerNumberOfUsers.Text);
+            String result = String.Empty;
+            List<Player> players = new List<Player>(); 
+            string lastName = txtSignUpFamilyName.Text;
+            Family family = new Family { Name = lastName };
+            bool isAddedFamily = restCalls.AddFamily(family);
+            if(isAddedFamily)
+            {
+                if (lblSignUpUserName1.Visible) { players.Add(new Player { Name = txtSignUpUserName1.Text, Password = txtSignUpPassword1.Text, Family = family }); }
+                if (lblSignUpUserName2.Visible) { players.Add(new Player { Name = txtSignUpUserName2.Text, Password = txtSignUpPassword2.Text, Family = family }); }
+                if (lblSignUpUserName3.Visible) { players.Add(new Player { Name = txtSignUpUserName3.Text, Password = txtSignUpPassword3.Text, Family = family }); }
+                if (lblSignUpUserName4.Visible) { players.Add(new Player { Name = txtSignUpUserName4.Text, Password = txtSignUpPassword4.Text, Family = family }); }
+                if (lblSignUpUserName5.Visible) { players.Add(new Player { Name = txtSignUpUserName5.Text, Password = txtSignUpPassword5.Text, Family = family }); }
+                foreach(Player p in players)
+                {
+                    bool isAddedPlayer = restCalls.AddPlayer(p);
+                    if (!isAddedPlayer)
+                    {
+                        result += "Problem occur while adding " + p.Name + "\n";
+                    }
+                }
+            }
+
 
         }
         
@@ -643,6 +729,16 @@ namespace WebApplication3
             lblGamePanel.Visible = true;
             showPanel("games");
             
+        }
+
+        protected void btnDeleteUser_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnAddPlayer_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

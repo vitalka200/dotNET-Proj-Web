@@ -196,8 +196,8 @@
                     </asp:Repeater>
                     <asp:Label ID="lblGameID" Text="GameID" Font-Bold="true" Font-Size="Large" Font-Names="Comic Sans MS" runat="server" />&nbsp;&nbsp;
                     <asp:TextBox ID="txtGameID" runat="server" Height="5px" />
-                    <asp:RequiredFieldValidator ID="RequiredFieldValidatorGameID" runat="server" ErrorMessage="Game id is required" ControlToValidate="txtGameID">
-                    </asp:RequiredFieldValidator>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidatorGameID" runat="server" ForeColor="Red" ErrorMessage="Game id is required"
+                        ControlToValidate="txtGameID" />
                     <br />
                     <asp:Button ID="btnCreateGame" runat="server" Text="New game" OnClick="btnCreateGame_Click" CausesValidation="false"/>&nbsp;&nbsp;
                     <asp:Button ID="btnRegisterGame" runat="server" Text="Register" OnClick="btnRegisterGame_Click" /> &nbsp;&nbsp;
@@ -216,9 +216,13 @@
                     <div class="container">
                         <label><b>Username</b></label>
                         <asp:TextBox  ID="textBoxSignInUname"  runat="server" />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ForeColor="Red" ErrorMessage="User name is required" 
+                            ControlToValidate="textBoxSignInUname" />
                         <br />
                         <label><b>Password</b></label>
                         <asp:TextBox ID="textBoxSignInPsw" TextMode="Password" runat="server"  />
+                        <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ForeColor="Red" ErrorMessage="Password id is required" 
+                            ControlToValidate="textBoxSignInPsw" />
                         <br />
                         <asp:Button ID="btnSignIn" runat="server" Text="Login" OnClick="btnSignIn_Click"/>
                     </div>
@@ -229,30 +233,119 @@
                     <div class="imgContainer">
                         <img src="Images/man.jpg" alt="Avatar" class="avatar" />
                     </div>
+                    <asp:Label ID="Label1" runat="server" Text="You can register as family with 5 people" />
                     <b>many users to sign up?</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <asp:TextBox ID="textBoxNumberOfUsers" runat="server" Width="55px" Height="16px"></asp:TextBox>  
-                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <asp:Button ID="btnNumberOfUsers" runat="server" Text="Start" OnClick="btnNumberOfUsers_Click" />
-                    
+                    <asp:TextBox ID="textBoxNumberOfUsers" runat="server" Width="55px" Height="16px"></asp:TextBox> <br/>
+                    <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ForeColor="Red" ErrorMessage="Number of users is required" 
+                        ControlToValidate="textBoxNumberOfUsers" />
+                    <asp:button ID="btnNumberOfUsers" runat="server" Text="Sign up" OnClick="btnNumberOfUsers_Click" />
+
+                    <asp:Label ID="lblValideNumberOfUsers" runat="server" Font-Bold="True" 
+                            Font-Names="Comic Sans MS" Font-Size="X-Large" Visible="false"/> <br /><br />
                 </asp:Panel>
 
                 <asp:Panel runat="server" ID="usersContainerPanel">
-                     
-                     <asp:Button ID="btnSignUp" runat="server" Text="Submit" OnClick="btnSignUp_Click" />
+                     <asp:Label ID="Label" runat="server" Text="NunberOfUsers:" Font-Bold="True" 
+                            Font-Names="Comic Sans MS" Font-Size="X-Large" ForeColor="#00cc99"/>&nbsp;&nbsp;
+                     <asp:Label ID="lblUserContainerNumberOfUsers" runat="server" Font-Bold="True" 
+                            Font-Names="Comic Sans MS" Font-Size="X-Large" ForeColor="#00cc99"/>
+                     <br /><br />
+
+                    <asp:Button ID="btnSignUp" runat="server" Text="Submit" OnClick="btnSignUp_Click" /> 
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <asp:Button ID="btnAddPlayer" runat="server" Text="Add Player" OnClick="btnAddPlayer_Click"/>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <asp:Button ID="btnDeleteUser" runat="server" Text="Remove Player" OnClick="btnDeleteUser_Click"/>
+                     <br />
+                     <asp:Label ID="lblSignUpControl" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="X-Large" />
+                     <br />
+                     <asp:Label ID="lblSignUPFamilyName" runat="server" Text="Last Name:"/>
+                     &nbsp;&nbsp;
+                     <asp:TextBox ID="txtSignUpFamilyName" runat="server" />
+                     <asp:RequiredFieldValidator ID="ruvFamily" runat="server" ControlToValidate="txtSignUpFamilyName" ErrorMessage="User name is required" ForeColor="Red" />
+                     <br />
+                     <br />
+                     <asp:Label ID="lblSignUpUserName1" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="Medium" Text="First Player Name: " Visible="false" />
+                     &nbsp;&nbsp;
+                     <asp:TextBox ID="txtSignUpUserName1" runat="server" Visible="false" />
+                     <br />
+                     <asp:RequiredFieldValidator ID="ruvUserName1" runat="server" ControlToValidate="txtSignUpUserName1" Enabled="false" ErrorMessage="User name is required" ForeColor="Red" />
+                     <br />
+                     <asp:Label ID="lblSignUpPassword1" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="Medium" Text="First Player Password: " Visible="false" />
+                     &nbsp;&nbsp;
+                     <asp:TextBox ID="txtSignUpPassword1" runat="server" TextMode="Password" Visible="false" />
+                     <br />
+                     <asp:RequiredFieldValidator ID="ruvPasswordUser1" runat="server" ControlToValidate="txtSignUpPassword1" Enabled="false" ErrorMessage="Passowrd is required" ForeColor="Red" />
+                     <br />
+                     <asp:Label ID="lblSignUpUserName2" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="Medium" Text="Second Player Name: " Visible="false" />
+                     &nbsp;&nbsp;
+                     <asp:TextBox ID="txtSignUpUserName2" runat="server" Visible="false" />
+                     <br />
+                     <asp:RequiredFieldValidator ID="ruvUserName2" runat="server" ControlToValidate="txtSignUpUserName2" Enabled="false" ErrorMessage="User name is required" ForeColor="Red" />
+                     <br />
+                     <asp:Label ID="lblSignUpPassword2" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="Medium" Text="Second Player Password: " Visible="false" />
+                     &nbsp;&nbsp;
+                     <asp:TextBox ID="txtSignUpPassword2" runat="server" TextMode="Password" Visible="false" />
+                     <br />
+                     <asp:RequiredFieldValidator ID="ruvPasswordUser2" runat="server" ControlToValidate="txtSignUpPassword2" Enabled="false" ErrorMessage="Password is required" ForeColor="Red" />
+                     <br />
+                     <br />
+                     <asp:Label ID="lblSignUpUserName3" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="Medium" Text="Third Player Name: " Visible="false" />
+                     &nbsp;&nbsp;
+                     <asp:TextBox ID="txtSignUpUserName3" runat="server" Visible="false" />
+                     <br />
+                     <asp:RequiredFieldValidator ID="ruvUserName3" runat="server" ControlToValidate="txtSignUpUserName3" Enabled="false" ErrorMessage="User name is required" ForeColor="Red" />
+                     <br />
+                     <br />
+                     <asp:Label ID="lblSignUpPassword3" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="Medium" Text="Third Player Password: " Visible="false" />
+                     &nbsp;&nbsp;
+                     <asp:TextBox ID="txtSignUpPassword3" runat="server" TextMode="Password" Visible="false" />
+                     <br />
+                     <asp:RequiredFieldValidator ID="ruvPasswordUser3" runat="server" ControlToValidate="txtSignUpPassword3" Enabled="false" ErrorMessage="Password is required" ForeColor="Red" />
+                     <br />
+                     <br />
+                     <asp:Label ID="lblSignUpUserName4" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="Medium" Text="Fourth Player Name: " Visible="false" />
+                     &nbsp;&nbsp;
+                     <asp:TextBox ID="txtSignUpUserName4" runat="server" Visible="false" />
+                     <br />
+                     <asp:RequiredFieldValidator ID="ruvUserName4" runat="server" ControlToValidate="txtSignUpUserName4" Enabled="false" ErrorMessage="User name is required" ForeColor="Red" />
+                     <br />
+                     <asp:Label ID="lblSignUpPassword4" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="Medium" Text="Fourth Player Password: " Visible="false" />
+                     &nbsp;&nbsp;
+                     <asp:TextBox ID="txtSignUpPassword4" runat="server" TextMode="Password" Visible="false" />
+                     <br />
+                     <asp:RequiredFieldValidator ID="ruvPasswordUser4" runat="server" ControlToValidate="txtSignUpPassword4" Enabled="false" ErrorMessage="Password is required" ForeColor="Red" />
+                     <br />
+                     <br />
+                     <asp:Label ID="lblSignUpUserName5" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="Medium" Text="Fifth Player Name: " Visible="false" />
+                     &nbsp;&nbsp;
+                     <asp:TextBox ID="txtSignUpUserName5" runat="server" Visible="false" />
+                     <br />
+                     <asp:RequiredFieldValidator ID="ruvUserName5" runat="server" ControlToValidate="txtSignUpUserName5" Enabled="false" ErrorMessage="User name is required" ForeColor="Red" />
+                     <br />
+                     <asp:Label ID="lblSignUpPassword5" runat="server" Font-Bold="True" Font-Names="Comic Sans MS" Font-Size="Medium" Text="Fifth Player Password: " Visible="false" />
+                     &nbsp;&nbsp;
+                     <asp:TextBox ID="txtSignUpPassword5" runat="server" TextMode="Password" Visible="false" />
+                     <br />
+                     <asp:RequiredFieldValidator ID="ruvPasswordUser5" runat="server" ControlToValidate="txtSignUpPassword5" Enabled="false" ErrorMessage="Password is required" ForeColor="Red" />
+                     <br />
+                     <br />
                 </asp:Panel>
 
                 <asp:Panel runat="server" ID="LoginSuccessPanel">
                       <div class="imgContainer">
                         <img src="Images/success.png" alt="Avatar" class="avatar" />
                       </div>
-                      <asp:Label runat="server" Text="Successfully Login" Font-Bold="True" Font-Italic="True" Font-Names="Comic Sans MS" Font-Size="X-Large" ForeColor="#00CC66" />
+                      <asp:Label ID="lblLoginSuccess" runat="server" Font-Bold="True" Font-Italic="True"
+                           Font-Names="Comic Sans MS" Font-Size="X-Large" ForeColor="#00CC66" />
                 </asp:Panel>
 
                 <asp:Panel runat="server" ID="LoginFailedPanel">
                       <div class="imgContainer">
                         <img src="Images/error.png" alt="Avatar" class="avatar" />
                       </div>
-                      <asp:Label runat="server" Text="Failed to Login" Font-Bold="True" Font-Italic="True" Font-Names="Comic Sans MS" Font-Size="X-Large" ForeColor="Red" />
+                      <asp:Label ID="lblLoginFailed" runat="server" Font-Bold="True" Font-Italic="True" 
+                          Font-Names="Comic Sans MS" Font-Size="X-Large" ForeColor="Red" />
                 </asp:Panel>
 
 
