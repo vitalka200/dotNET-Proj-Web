@@ -53,8 +53,13 @@ namespace WebApplication3
             
             Repeater1.DataSource =
                 from g in Games
-                select new FormatedGame { Id = g.Id.ToString(), CreatedDateTime = g.CreatedDateTime, GameStatus = g.GameStatus,
-                                         Player1 = g.Player1.Name, Player2 = g.Player2.Name, WinnerPlayerNum = g.WinnerPlayerNum.ToString()};
+                select new FormatedGame {
+                    Id = g.Id.ToString(),
+                    CreatedDateTime = g.CreatedDateTime,
+                    GameStatus = g.GameStatus,
+                    Player1 = g.Player1 != null ? g.Player1.Name : null,
+                    Player2 = g.Player2 != null ? g.Player2.Name : null,
+                    WinnerPlayerNum = g.WinnerPlayerNum.ToString()};
             Repeater1.DataBind();
         }
 
@@ -669,7 +674,7 @@ namespace WebApplication3
         {
             bool registerSuccess = false;
             bool addPlayer = false;
-            Game g = (Game)Games.Where(game => game.Id.Equals(gameID));
+            Game g = (Game)Games.Where(game => game.Id.Equals(Convert.ToInt32(gameID)));
             Player p = restCalls.GetPlayerById(Session["UserID"].ToString());
             if (g.Player1 == null)
             {
@@ -707,6 +712,8 @@ namespace WebApplication3
         protected void btnCreateGame_Click(object sender, EventArgs e)
         {
             Game game = new Game();
+            game.GameStatus = Status.NEW_GAME;
+            game.CreatedDateTime = DateTime.Now;
             Player p = restCalls.GetPlayerById(Session["UserID"].ToString());
             game.Player1 = p;
             bool addGameSuccess = restCalls.AddGame(game);
