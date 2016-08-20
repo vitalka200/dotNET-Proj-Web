@@ -349,7 +349,7 @@ namespace WebApplication3
                 Session["UserID"] = player.Id;
                 Session["password"] = player.Password;
                 Session["userName"] = player.Name;
-                Session["Family"] = player.Family;
+                Session["Family"] = player.Family.Name;
                 Session["numberOfVisiting"] = (int)Session["numberOfVisiting"] + 1;
                 showPanel("login susscess");
             }
@@ -464,17 +464,28 @@ namespace WebApplication3
             }
         }
 
+        protected bool isOldContentEqualNew(string oldContent, string newContent)
+        {
+            if (string.IsNullOrEmpty(newContent) || newContent.Equals("null")) return false;
+            return newContent.Equals(oldContent);
+        }
+
         protected void btnUpdateInfo_Click(object sender, EventArgs e)
         {
             string updateUserName = txtUpdateInfoUserName.Text;
             string updateFamily = txtUpdateInfoUserLastName.Text;
             string updatePassword = txtUpdateInfoUserPassword.Text;
-            if(!Session["userName"].ToString().Equals(updateUserName) || !Session["Family"].ToString().Equals(updateFamily) 
-                || !Session["password"].ToString().Equals(updatePassword))
+            string stored_userName = string.Format("{0}", Session["userName"]);
+            string stored_Family = string.Format("{0}", Session["Family"]);
+            string stored_password = string.Format("{0}", Session["password"]);
+            if (!isOldContentEqualNew(stored_userName, updateUserName)
+                || !isOldContentEqualNew(stored_Family, updateFamily)
+                || !isOldContentEqualNew(stored_password, updatePassword)
+                )
             {
                 Player p = restCalls.GetPlayerById(Session["UserID"].ToString());
                 p.Name = updateUserName;
-               // p.Family.Name = updateFamily;
+                p.Family.Name = updateFamily;
                 p.Password = updatePassword;
                 bool saved = restCalls.UpdatePlayer(p);
                 if(saved)
