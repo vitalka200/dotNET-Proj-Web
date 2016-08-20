@@ -15,7 +15,6 @@ namespace WebApplication3
     {
         const int MAX_TO_SIGN_UP = 5;
         const int MIN_TO_SIGN_UP = 1;
-        int numberOfPlayers = 0;
 
         List<Panel> allPanels = new List<Panel>();
         public RestApiCalls restCalls = new RestApiCalls();
@@ -41,6 +40,7 @@ namespace WebApplication3
                 Session["password"] = null;
                 Session["Family"] = null;
                 Session["numberOfVisiting"] = 0;
+                Session["numberOfPlayers"] = 0;
                 showPanel("homePanel");
                 updateGameRepater();
             
@@ -308,10 +308,12 @@ namespace WebApplication3
                 tCell.Text = g.GameStatus.ToString();
                 tRow.Cells.Add(tCell);
                 tCell = new TableCell();
-                tCell.Text = g.Player1.Name;
+                if (g.Player1 == null) { tCell.Text = ""; }
+                else { tCell.Text = g.Player1.Name; }
                 tRow.Cells.Add(tCell);
                 tCell = new TableCell();
-                tCell.Text = g.Player2.Name;
+                if (g.Player2 == null) { tCell.Text = ""; }
+                else { tCell.Text = g.Player2.Name; }
                 tRow.Cells.Add(tCell);
                 tCell = new TableCell();
                 if (g.WinnerPlayerNum == 1) { tCell.Text = g.Player1.Name; }
@@ -369,6 +371,7 @@ namespace WebApplication3
             {
                 case 1:
                     enableUser1(true);
+                    ruvFamily.Enabled = false;
                     enableUser2(false);
                     enableUser3(false);
                     enableUser4(false);
@@ -505,7 +508,7 @@ namespace WebApplication3
         
         protected void btnNumberOfUsers_Click(object sender, EventArgs e)
         {
-            numberOfPlayers = Convert.ToInt32(textBoxNumberOfUsers.Text);
+            int numberOfPlayers = Convert.ToInt32(textBoxNumberOfUsers.Text);
             if(numberOfPlayers > MAX_TO_SIGN_UP || numberOfPlayers < MIN_TO_SIGN_UP)
             {
                 lblValideNumberOfUsers.Text = "Invalid number of users";
@@ -517,6 +520,7 @@ namespace WebApplication3
             } 
             else
             {
+                Session["numberOfPlayers"] = numberOfPlayers;
                 lblSignUpControl.Text = "";
                 lblSignUpControl.Visible = false;
                 textBoxNumberOfUsers.Text = "";
@@ -638,7 +642,6 @@ namespace WebApplication3
 
         protected void btnSignUp_Click(object sender, EventArgs e)
         {
-            //int numberOfUsers = Convert.ToInt32(lblUserContainerNumberOfUsers.Text);
             String result = String.Empty;
             List<Player> players = new List<Player>(); 
             string lastName = txtSignUpFamilyName.Text;
@@ -646,12 +649,13 @@ namespace WebApplication3
             bool isAddedFamily = restCalls.AddFamily(family);
             if(isAddedFamily)
             {
-                if (lblSignUpUserName1.Visible) { players.Add(new Player { Name = txtSignUpUserName1.Text, Password = txtSignUpPassword1.Text, Family = family }); }
-                if (lblSignUpUserName2.Visible) { players.Add(new Player { Name = txtSignUpUserName2.Text, Password = txtSignUpPassword2.Text, Family = family }); }
-                if (lblSignUpUserName3.Visible) { players.Add(new Player { Name = txtSignUpUserName3.Text, Password = txtSignUpPassword3.Text, Family = family }); }
-                if (lblSignUpUserName4.Visible) { players.Add(new Player { Name = txtSignUpUserName4.Text, Password = txtSignUpPassword4.Text, Family = family }); }
-                if (lblSignUpUserName5.Visible) { players.Add(new Player { Name = txtSignUpUserName5.Text, Password = txtSignUpPassword5.Text, Family = family }); }
-                foreach(Player p in players)
+                if (!String.IsNullOrEmpty(txtSignUpUserName1.Text)) { players.Add(new Player { Name = txtSignUpUserName1.Text, Password = txtSignUpPassword1.Text, Family = family }); }
+                if (!String.IsNullOrEmpty(txtSignUpUserName2.Text)) { players.Add(new Player { Name = txtSignUpUserName2.Text, Password = txtSignUpPassword2.Text, Family = family }); }
+                if (!String.IsNullOrEmpty(txtSignUpUserName3.Text)) { players.Add(new Player { Name = txtSignUpUserName3.Text, Password = txtSignUpPassword3.Text, Family = family }); }
+                if (!String.IsNullOrEmpty(txtSignUpUserName4.Text)) { players.Add(new Player { Name = txtSignUpUserName4.Text, Password = txtSignUpPassword4.Text, Family = family }); }
+                if (!String.IsNullOrEmpty(txtSignUpUserName5.Text)) { players.Add(new Player { Name = txtSignUpUserName5.Text, Password = txtSignUpPassword5.Text, Family = family }); }
+
+                foreach (Player p in players)
                 {
                     bool isAddedPlayer = restCalls.AddPlayer(p);
                     if (!isAddedPlayer) { result += "Problem occur while adding " + p.Name + "\n"; }
@@ -674,9 +678,9 @@ namespace WebApplication3
         {
             bool registerSuccess = false;
             bool addPlayer = false;
-            Game g = (Game)Games.Where(game => game.Id.Equals(Convert.ToInt32(gameID)));
+            Game g = restCalls.GetGameById(gameID);
             Player p = restCalls.GetPlayerById(Session["UserID"].ToString());
-            if (g.Player1 == null)
+            if (g.Player1 == null || !g.Player1.Equals(p))
             {
                 g.Player1 = p;
                 addPlayer = true;
@@ -766,29 +770,38 @@ namespace WebApplication3
 
         protected void btnDeleteUser_Click(object sender, EventArgs e)
         {
-            int numberOfUsers = numberOfPlayers - 1;
-            numberOfPlayers--;
-            if (numberOfUsers > MIN_TO_SIGN_UP)
+            int numberOfUsers = Convert.ToInt32(Session["numberOfPlayers"].ToString()) - 1;
+            
+            if (numberOfUsers < MIN_TO_SIGN_UP)
             {
                 lblSignUpControl.Text = "Something went worng while removing player";
                 lblSignUpControl.Visible = true;
             }
-            else { configSignUp(numberOfUsers); }
+            else
+            {
+                lblUserContainerNumberOfUsers.Text = numberOfUsers.ToString();
+                Session["numberOfPlayers"] = numberOfUsers;
+                configSignUp(numberOfUsers);
+            }
             showPanel("userControl");
         }
 
         protected void btnAddPlayer_Click(object sender, EventArgs e)
         {
 
-            int numberOfUsers = numberOfPlayers + 1;
-            numberOfPlayers ++;
-              //  Convert.ToInt32(lblUserContainerNumberOfUsers.Text) + 1;
-            if (numberOfUsers < MAX_TO_SIGN_UP)
+            int numberOfUsers = Convert.ToInt32(Session["numberOfPlayers"].ToString()) + 1;
+           
+            if (numberOfUsers > MAX_TO_SIGN_UP)
             {
                 lblSignUpControl.Text = "Something went worng while adding player";
                 lblSignUpControl.Visible = true;
             }
-            else { configSignUp(numberOfUsers); }
+            else
+            {
+                lblUserContainerNumberOfUsers.Text = numberOfUsers.ToString();
+                Session["numberOfPlayers"] = numberOfUsers;
+                configSignUp(numberOfUsers);
+            }
             showPanel("userControl");
         }
     }

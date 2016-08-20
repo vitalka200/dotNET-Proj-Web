@@ -273,7 +273,7 @@ namespace WebApplication3
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
             return result;
         }
-
+     
         public List<Player> GetPlayersByGameId(string gameId)
         {
             WebChannelFactory<IRestCheckersService> channel = MakeChannel();
@@ -433,5 +433,22 @@ namespace WebApplication3
             catch (Exception ex) { Debug.WriteLine(ex.Message); }
             return result;
         }
+
+        public Game GetGameById(string gameId)
+        {
+            WebChannelFactory<IRestCheckersService> channel = MakeChannel();
+            Game result = null;
+            try
+            {
+                channel.Open();
+                IRestCheckersService c = channel.CreateChannel();
+                result = c.GetGameById(gameId);
+                channel.Close();
+                return result;
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message); }
+            return result;
+        }
+
     }
 }
